@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Lê Văn Linh (Cypher) — Tổng Hợp</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="shortcut icon" href="https://scontent.fhan18-1.fna.fbcdn.net/v/t39.30808-6/557481975_122187746096569142_6613018808623610406_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=pd93vMoULecQ7kNvwFdY8hT&_nc_oc=AdlmlfmUx7ViYSuDyxfqFGQUUUyJovbCmUNXXF2LR0QjQjQhUKTA2PxEmvE5uQrrytJtw&_nc_zt=23&_nc_ht=scontent.fhan18-1.fna&_nc_gid=XvYrDtqwNKIW7GSz0d8aCQ&oh=00_AffwcSnQZPTnX1284lJjcB2vJ6xZVeQhUXzZrBOpZ4pxXw&oe=6906B1FF">
+
+    <style>
+        /* ===== CSS Variables ===== */
+        :root{
+            --glass-bg: rgba(255,255,255,0.04);
+            --card-bg: rgba(8,10,14,0.75);
+            --accent: #00c4ff;
+            --accent-2: #7c4dff;
+            --text: #e9f1fb;
+            --muted: #bfcbd8;
+            --success: #4be27a;
+            --toast-bg: rgba(0,0,0,0.75);
+            --neon-strong: rgba(0,196,255,0.45);
+        }
+
+        /* ===== Base ===== */
+        *{box-sizing:border-box;margin:0;padding:0}
+        html,body{height:100%}
+        body{
+            font-family:'Poppins',sans-serif;
+            background: linear-gradient(270deg,#0f0c1a,#081024);
+            color:var(--text);
+            -webkit-font-smoothing:antialiased;
+            overflow-y:auto;
+        }
+        .rgb-layer{position:fixed;inset:0;z-index:0;background: linear-gradient(270deg,rgba(124,77,255,0.4),rgba(0,196,255,0.4),rgba(0,255,170,0.35),rgba(255,85,150,0.35));background-size:900% 900%;filter:blur(28px) saturate(180%);pointer-events:none;animation: rgbFlow 9s linear infinite;mix-blend-mode:screen;opacity:1;}
+        @keyframes rgbFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+        .dark-overlay{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,rgba(0,0,0,0.55),rgba(2,6,12,0.8));pointer-events:none;}
+
+        /* ===== NAV TABS ===== */
+        .tab-nav {
+            position: sticky; top: 0; z-index: 1000;
+            background: rgba(5, 8, 18, 0.88);
+            backdrop-filter: blur(18px);
+            border-bottom: 1px solid rgba(0,196,255,0.12);
+            display: flex; justify-content: center; gap: 0;
+        }
+        .tab-btn {
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.82rem; font-weight: 700;
+            letter-spacing: 0.08em; text-transform: uppercase;
+            color: var(--muted);
+            background: none; border: none;
+            padding: 1rem 1.8rem;
+            cursor: pointer; position: relative;
+            transition: color 0.25s;
+        }
+        .tab-btn::after {
+            content: ''; position: absolute; bottom: 0; left: 50%; right: 50%;
+            height: 2px; background: var(--accent);
+            box-shadow: 0 0 10px var(--accent);
+            transition: left 0.25s, right 0.25s;
+        }
+        .tab-btn.active { color: var(--accent); }
+        .tab-btn.active::after { left: 0; right: 0; }
+        .tab-btn:hover:not(.active) { color: var(--text); }
+
+        /* ===== SECTIONS ===== */
+        .section { display: none; position: relative; z-index: 2; }
+        .section.active { display: block; animation: fadeUp 0.35s ease; }
+        @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+        /* ===== PROFILE (original styles) ===== */
+        .wrap{position:relative;z-index:2;max-width:1000px;margin:36px auto;padding:24px}
+        header{display:flex;gap:20px;align-items:center;background:rgba(255,255,255,0.03);border-radius:14px;padding:28px;box-shadow:0 8px 36px rgba(2,6,12,0.7);backdrop-filter:blur(10px)}
+        .avatar{width:110px;height:110px;border-radius:50%;flex:0 0 110px;background-size:cover;background-position:center;box-shadow:0 0 25px rgba(0,196,255,0.3)}
+        header h1{font-size:1.6rem;color:var(--text);margin-bottom:6px}
+        header p{color:var(--muted);font-size:0.98rem}
+        .grid{display:grid;grid-template-columns:1fr 360px;gap:20px;margin-top:20px}
+        .card{background:var(--card-bg);border-radius:12px;padding:20px;box-shadow:0 6px 30px rgba(2,6,12,0.6)}
+        .card h2{color:var(--accent);margin-bottom:10px}
+        .lead{color:var(--muted);line-height:1.6;margin-bottom:14px}
+        .services{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+        .service-item{background:rgba(255,255,255,0.03);padding:8px 12px;border-radius:999px;font-size:0.92rem;color:var(--muted);border:1px solid rgba(255,255,255,0.05);transition:.2s}
+        .service-item:hover{color:var(--text);transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,196,255,0.1);border-color:var(--neon-strong)}
+        .panel{background:rgba(255,255,255,0.03);border-radius:12px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px}
+        .panel h3{color:var(--accent)}
+        .qr{width:190px;height:190px;border-radius:12px;border:3px solid rgba(255,255,255,0.05);box-shadow:0 0 40px rgba(0,196,255,0.25)}
+        .qr-wrap{position:relative}
+        .qr-wrap::after{content:"";position:absolute;inset:-12px;border-radius:16px;background:conic-gradient(from 0deg,rgba(0,196,255,0.4),rgba(124,77,255,0.35));filter:blur(16px);animation:spin 8s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .bank-info{width:100%;margin-top:8px}
+        .bank-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;margin:6px 0;background:rgba(255,255,255,0.02);cursor:pointer;transition:.2s}
+        .bank-row:hover{background:rgba(0,196,255,0.08)}
+        .label{color:var(--muted);font-size:0.92rem}
+        .value{color:var(--text);font-weight:700}
+        .hint{font-size:0.82rem;color:var(--muted);margin-top:6px;text-align:center}
+        .links{display:flex;gap:10px;margin-top:12px}
+        .social{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.05);color:var(--text);text-decoration:none;transition:.2s;font-weight:600}
+        .social:hover{background:rgba(0,196,255,0.1);transform:translateY(-4px)}
+        .donate{margin-top:10px;padding:10px 16px;border-radius:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#041225;font-weight:700;text-decoration:none;text-align:center;transition:.2s;width:100%;}
+        .donate:hover{filter:brightness(1.1);transform:translateY(-2px)}
+        .webs{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}
+        .web-card{flex:0 0 calc(50% - 12px);background:rgba(255,255,255,0.02);border-radius:12px;padding:12px;display:flex;align-items:center;gap:10px;transition:.2s;border:1px solid rgba(255,255,255,0.05);text-decoration:none;color:inherit;cursor:pointer;}
+        .web-card:hover{transform:translateY(-6px);border-color:var(--neon-strong);box-shadow:0 0 20px rgba(0,196,255,0.08)}
+        .web-card img{width:40px;height:40px;border-radius:10px;box-shadow:0 0 12px rgba(0,196,255,0.3)}
+        .title{font-weight:700;color:var(--text)}
+        .desc{color:var(--muted);font-size:0.85rem}
+
+        /* Comments */
+        .comment-area{width:100%; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;}
+        .comment-area p{color:var(--muted); font-size: 0.85rem; margin-bottom: 10px;}
+        .comment-input-group{display: flex; gap: 8px; margin-bottom: 15px;}
+        .comment-input-group input[type="text"]{
+            flex-grow: 1; padding: 10px; border-radius: 6px; border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.5); color: var(--text); outline: none;
+        }
+        .comment-input-group button{
+            padding: 10px 15px; background: var(--accent-2); color: var(--text);
+            font-weight: 600; border: none; border-radius: 6px; cursor: pointer; transition:.2s;
+        }
+        .comment-input-group button:hover{filter: brightness(1.2);}
+        .comment-list-title{color:var(--muted); margin-bottom: 8px; font-weight: 600;}
+        #commentList li {
+            padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 5px; font-size: 0.95rem;
+        }
+        #commentList li:last-child { border-bottom: none; }
+        .comment-meta{display:flex; align-items:center; gap:8px;}
+        .comment-meta img{width:24px;height:24px;border-radius:50%;}
+        .comment-meta strong{color:var(--accent); font-weight: 700;}
+        .comment-text{color:var(--text); flex-grow: 1;}
+        .comment-time{color:var(--muted);display:block;text-align:right; font-size: 0.75rem;}
+
+        /* Toast */
+        .toast{position:fixed;right:20px;bottom:80px;padding:12px 16px;border-radius:10px;background:var(--toast-bg);color:var(--text);box-shadow:0 8px 30px rgba(0,0,0,0.6);display:none;font-weight:700;z-index: 10000;}
+        .toast.show{display:flex;animation:fade .3s ease both}
+        @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+        /* ===== ATM / QR GENERATOR ===== */
+        .atm-wrap { max-width: 480px; margin: 0 auto; padding: 36px 20px; }
+        .atm-title { font-size: 1.6rem; font-weight: 700; color: var(--accent); text-align: center; margin-bottom: 6px; }
+        .atm-sub { text-align: center; color: var(--muted); font-size: 0.88rem; margin-bottom: 28px; }
+        .atm-card { background: var(--card-bg); border-radius: 14px; padding: 22px; margin-bottom: 16px; box-shadow: 0 6px 30px rgba(2,6,12,0.6); }
+        .atm-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: block; }
+        /* Bank selector — pill cards */
+        .bank-pills { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .bank-pill {
+            background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.07);
+            border-radius: 12px; padding: 14px 10px; text-align: center; cursor: pointer;
+            font-size: 0.92rem; font-weight: 600; color: var(--muted); transition: .2s; user-select: none;
+        }
+        .bank-pill .bp-name { font-size: 0.95rem; font-weight: 700; margin-bottom: 2px; }
+        .bank-pill .bp-acc  { font-size: 0.72rem; color: var(--muted); opacity: .7; }
+        .bank-pill.active {
+            border-color: var(--accent); color: var(--accent);
+            background: rgba(0,196,255,0.07); box-shadow: 0 0 16px rgba(0,196,255,0.18);
+        }
+        .bank-pill.active .bp-acc { opacity: 1; color: var(--accent); }
+        .bank-sel-label { font-size: 0.82rem; color: var(--success); margin-top: 10px; font-weight: 600; }
+        /* Inputs */
+        .atm-input {
+            width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px; padding: 12px 14px; color: var(--text); font-family: 'Poppins', sans-serif;
+            font-size: 1rem; outline: none; transition: border-color .2s;
+        }
+        .atm-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,196,255,0.1); }
+        .amount-hint { font-size: 0.82rem; color: var(--accent); margin-top: 6px; font-weight: 600; }
+        /* Buttons */
+        .atm-btn {
+            width: 100%; padding: 13px; border: none; border-radius: 10px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            color: #041225; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; transition: .25s; letter-spacing: 0.04em; margin-top: 4px;
+        }
+        .atm-btn:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,196,255,0.35); }
+        .atm-btn:active { transform: translateY(0); }
+        .atm-btn-dl {
+            width: 100%; padding: 12px; border: none; border-radius: 10px;
+            background: var(--success); color: #011a0a;
+            font-family: 'Poppins', sans-serif; font-size: 0.92rem; font-weight: 700;
+            cursor: pointer; transition: .25s; margin-top: 10px; display: none;
+        }
+        .atm-btn-dl:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        /* QR canvas result */
+        .qr-canvas-wrap {
+            display: none; text-align: center; margin-top: 22px;
+            animation: fadeUp .35s ease;
+        }
+        .qr-canvas-wrap.show { display: block; }
+        #qrCanvas {
+            background: #fff; padding: 10px; border-radius: 14px;
+            width: 260px; max-width: 100%;
+            box-shadow: 0 0 36px rgba(0,196,255,0.25);
+            border: 2px solid rgba(0,196,255,0.2);
+        }
+        .receiver-note { margin-top: 12px; color: var(--muted); font-size: 0.85rem; }
+        .receiver-note strong { color: var(--accent); }
+
+        /* ===== BUILDSHOP ===== */
+        .shop-wrap { max-width: 720px; margin: 0 auto; padding: 36px 20px; }
+        .shop-title { font-size: 1.6rem; font-weight: 700; color: var(--accent); text-align: center; margin-bottom: 6px; }
+        .shop-sub { text-align: center; color: var(--muted); font-size: 0.88rem; margin-bottom: 28px; }
+        .shop-card { background: var(--card-bg); border-radius: 14px; padding: 22px; margin-bottom: 16px; box-shadow: 0 6px 30px rgba(2,6,12,0.6); }
+        .shop-card h3 { color: var(--accent); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; }
+        .ext-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .ext-opt {
+            background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.07);
+            border-radius: 10px; padding: 10px 6px; text-align: center; cursor: pointer;
+            transition: .2s; user-select: none;
+        }
+        .ext-opt .eo-name { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+        .ext-opt .eo-price { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+        .ext-opt.active { border-color: var(--accent-2); color: var(--accent-2); background: rgba(124,77,255,0.1); box-shadow: 0 0 14px rgba(124,77,255,0.25); }
+        .ext-opt.active .eo-name { color: var(--accent-2); }
+        .shop-input {
+            width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px; padding: 12px 14px; color: var(--text); font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem; outline: none; transition: border-color .2s; margin-bottom: 2px;
+        }
+        .shop-input:focus { border-color: var(--accent); }
+        .shop-select {
+            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 10px; padding: 12px 14px; color: var(--text); font-family: 'Poppins', sans-serif;
+            font-size: 0.92rem; outline: none; appearance: none; cursor: pointer;
+        }
+        .cb-row {
+            display: flex; align-items: center; gap: 12px;
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 10px; padding: 12px 14px; cursor: pointer; margin-bottom: 8px; transition: .2s;
+        }
+        .cb-row:hover { border-color: rgba(0,196,255,0.3); }
+        .cb-row input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+        .cb-row label { cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text); flex: 1; }
+        .cb-row .cb-price { color: var(--accent); font-weight: 700; font-size: 0.85rem; }
+        .summary-box { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 14px; }
+        .sum-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
+        .sum-row:last-child { border-bottom: none; }
+        .sum-row .sl { color: var(--muted); }
+        .sum-row .sv { font-weight: 700; color: var(--text); }
+        .sum-row.total-row .sl { color: var(--accent); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
+        .sum-row.total-row .sv { color: var(--accent); font-size: 1.1rem; font-weight: 700; }
+        .shop-btn {
+            width: 100%; padding: 13px; border: none; border-radius: 10px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            color: #041225; font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 700;
+            cursor: pointer; transition: .25s; margin-top: 14px;
+        }
+        .shop-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .pay-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(0,196,255,0.15); border-radius: 12px; padding: 18px; text-align: center; margin-top: 14px; display: none; }
+        .pay-box.show { display: block; animation: fadeUp .3s ease; }
+        .pay-box p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; margin-bottom: 6px; }
+        .pay-box p strong { color: var(--text); }
+        .pay-box .pay-amount { font-size: 1.2rem; font-weight: 700; color: var(--accent); margin: 8px 0; }
+        .pay-box img { width: 180px; height: 180px; border-radius: 12px; border: 2px solid rgba(0,196,255,0.2); box-shadow: 0 0 24px rgba(0,196,255,0.2); margin-top: 12px; }
+        .demo-link { display: inline-block; margin-top: 12px; padding: 9px 18px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.88rem; transition: .2s; }
+        .demo-link:hover { border-color: var(--accent); color: var(--accent); }
+        .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+        .feat-item { display: flex; align-items: center; gap: 7px; font-size: 0.85rem; color: var(--muted); }
+        .feat-item::before { content: '✓'; color: var(--success); font-weight: 700; flex-shrink: 0; }
+
+        /* ===== Chatbot ===== */
+        #cypher-toggle { position: fixed; bottom: 24px; right: 24px; width:56px; height:56px; border-radius:50%; background: linear-gradient(135deg,#00c6ff,#0072ff); color:#fff; border:none; z-index:10050; cursor:pointer; box-shadow:0 8px 30px rgba(0,0,0,0.35); display:flex; align-items:center; justify-content:center; font-size:22px; transition: transform 0.3s ease; }
+        #cypher-toggle:hover { transform: scale(1.05); }
+        #cypher-panel { position: fixed; bottom: 96px; right: 24px; width:360px; max-height:520px; background:#0b1220; border-radius:14px; box-shadow:0 12px 40px rgba(0,0,0,0.6); display:none; flex-direction:column; overflow:hidden; z-index:10040; border:1px solid rgba(0,198,255,0.12); }
+        #cypher-header { padding:12px 14px; font-weight:700; color:#fff; background:linear-gradient(90deg,#00c6ff22,#0072ff22); }
+        #cypher-messages { flex:1; padding:12px; overflow-y:auto; font-size:14px; color:#e6eef8; background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent); }
+        .cy-msg { display:inline-block; padding:8px 12px; border-radius:12px; margin:6px 0; max-width:80%; word-wrap:break-word; }
+        .cy-user { background:linear-gradient(90deg,#0072ff,#00c6ff); color:#001827; align-self:flex-end; float:right; border-bottom-right-radius:4px; }
+        .cy-bot { background:#0f1720; color:#e6eef8; align-self:flex-start; float:left; border-bottom-left-radius:4px; }
+        #cypher-input { display:flex; gap:8px; padding:10px; border-top:1px solid rgba(255,255,255,0.02); background:rgba(0,0,0,0.2); }
+        #cypher-input input { flex:1; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.03); background:#07101a; color:#fff; outline:none; font-size: 14px; }
+        #cypher-input button { padding:10px 14px; border-radius:8px; border:none; background:#00c6ff; color:#012; cursor:pointer; font-weight:700; transition: background-color 0.2s; }
+        #cypher-input button:hover { background: #4ccfff; }
+        .clearfix::after { content:""; display:block; clear:both; }
+
+        /* Footer */
+        footer{margin-top:26px;text-align:center;color:var(--muted);font-size:0.9rem;padding-bottom:80px}
+        @media(max-width:980px){.grid{grid-template-columns:1fr}.panel{order:-1}.web-card{flex:0 0 100%}}
+        @media(max-width:520px){.ext-grid{grid-template-columns:repeat(2,1fr)}.bank-pills{grid-template-columns:1fr 1fr}}
+    </style>
+</head>
+<body>
+
+<div class="rgb-layer"></div>
+<div class="dark-overlay"></div>
+
+<!-- ===== NAVIGATION TABS ===== -->
+<nav class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('profile',this)">👤 Hồ Sơ</button>
+    <button class="tab-btn" onclick="showTab('atm',this)">💳 Tạo QR</button>
+    <button class="tab-btn" onclick="showTab('shop',this)">🌐 Báo Giá Web</button>
+</nav>
+
+<!-- ============================== -->
+<!--        PROFILE SECTION         -->
+<!-- ============================== -->
+<div id="profile" class="section active">
+    <div class="wrap">
+
+        <header>
+            <div class="avatar" style="background-image:url('https://sf-static.upanhlaylink.com/img/image_20260123d980ed2007353608bcd74ca68d383677.jpg');"></div>
+            <div class="meta">
+                <h1>Lê Văn Linh (Cypher)</h1>
+                <p>Admin website <a href="https://cypher234.shop" target="_blank" style="color:var(--accent);text-decoration:underline">Cypher234.shop</a></p>
+            </div>
+        </header>
+
+        <div class="grid">
+
+            <div class="card">
+                <h2>Giới thiệu bản thân</h2>
+                <p class="lead">Xin chào! Tôi là <strong>Lê Văn Linh(Cypher)</strong>, chuyên cung cấp các dịch vụ game và thiết kế web. Uy tín, an toàn và chất lượng là ưu tiên hàng đầu. Chúng tôi cam kết chất lượng dịch vụ được ưu tiên hàng đầu sẽ làm cho quý khách hài lòng tuyệt đối. Welcome To Cypher</p>
+
+                <h2>Dịch vụ</h2>
+                <div class="services">
+                    <span class="service-item">Tạo shop game siêu tốc giá rẻ</span>
+                    <span class="service-item">Cung cấp dịch vụ trực tuyến điện tử giải trí</span>
+                    <span class="service-item">Tư vấn thương hiệu cá nhân</span>
+                    <span class="service-item">Tối ưu SEO & Marketing</span>
+                    <span class="service-item">Cung cấp tài khoản ảo về game Liên Quân Mobile giải trí trực tuyến</span>
+                </div>
+
+                <h2 style="margin-top:18px">Thanh toán nhanh (Quét QR)</h2>
+                <div class="panel">
+                    <div class="qr-wrap"><img class="qr" src="https://img.vietqr.io/image/970407-19073015796012-compact.png?addInfo=LE%20VAN%20LINH" alt="QR Techcombank"></div>
+
+                    <div class="bank-info">
+                        <div class="bank-row copy-target" data-copy-text="Techcombank"><div class="label">Ngân hàng</div><div class="value">Techcombank</div></div>
+                        <div class="bank-row copy-target" data-copy-text="19073015796012"><div class="label">Số tài khoản</div><div class="value">19073015796012</div></div>
+                        <div class="bank-row copy-target" data-copy-text="LÊ VĂN LINH"><div class="label">Chủ tài khoản</div><div class="value">LÊ VĂN LINH</div></div>
+                        <div class="hint">Nhấn vào để sao chép thông tin.</div>
+                    </div>
+
+                    <div class="links">
+                        <a class="social" href="https://zalo.me/0366241530" target="_blank">Zalo Chat</a>
+                        <a class="social" href="https://www.facebook.com/onessz26/" target="_blank">Facebook</a>
+                    </div>
+
+                    <a class="donate" href="https://vietqr.co/api/generate/tcb/19073015796012/LE%20VAN%20LINH" target="_blank">Donate / Hỗ trợ</a>
+                </div>
+            </div>
+
+            <aside class="panel">
+                <h3>🌐 Trang Web Của Tôi</h3>
+                <div class="webs">
+                    <a class="web-card" href="https://cypher234.shop" target="_blank">
+                        <img src="https://sf-static.upanhlaylink.com/img/image_20251124b381eb772af6c8b58d9718840b1773b8.jpg" alt="">
+                        <div><div class="title">Cypher234.shop</div><div class="desc">Random 9 cá 100% ra 3s</div></div>
+                    </a>
+                    <!-- Link to buildshop tab inside this page -->
+                    <div class="web-card" onclick="showTab('shop', document.querySelectorAll('.tab-btn')[2]); window.scrollTo({top:0,behavior:'smooth'});" style="cursor:pointer;">
+                        <img src="https://sf-static.upanhlaylink.com/img/image_20251124b381eb772af6c8b58d9718840b1773b8.jpg" alt="">
+                        <div><div class="title">Tạo shop</div><div class="desc">Báo giá website siêu rẻ</div></div>
+                    </div>
+                </div>
+
+                <div class="comment-area">
+                    <button id="loginBtn" style="padding: 10px 15px; background: var(--accent); color: #041225; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; width: 100%; margin-bottom: 15px;">Đăng nhập bằng Google</button>
+                    <button id="logoutBtn" style="padding: 10px 15px; background: var(--accent-2); color: #fff; font-weight: 700; border: none; border-radius: 8px; cursor: pointer; width: 100%; display: none; margin-bottom: 15px;">Đăng xuất</button>
+
+                    <div id="comment-section">
+                        <h3 style="color:var(--text); margin-bottom: 10px;">Bình luận</h3>
+                        <p>Lưu Ý : Mỗi người chỉ được bình luận 1 lần không thể sửa hay xóa.</p>
+                        <div class="comment-input-group">
+                            <input type="text" id="commentInput" placeholder="Vui lòng đăng nhập..." disabled>
+                            <button id="sendComment" disabled>Gửi</button>
+                        </div>
+
+                        <h4 class="comment-list-title">Danh sách bình luận:</h4>
+                        <ul id="commentList" style="list-style-type: none; padding: 0;"></ul>
+                    </div>
+                </div>
+            </aside>
+        </div>
+
+        <footer>© 2025 LÊ VĂN LINH — Thiết kế &amp; Hỗ trợ: Cypher</footer>
+    </div>
+</div>
+
+<!-- ============================== -->
+<!--       ATM / QR SECTION         -->
+<!-- ============================== -->
+<div id="atm" class="section">
+    <div class="atm-wrap">
+        <h2 class="atm-title">Tạo QR Chuyển Khoản</h2>
+        <p class="atm-sub">Tạo mã QR thanh toán tức thì — tải về máy dễ dàng</p>
+
+        <!-- Bank picker -->
+        <div class="atm-card">
+            <span class="atm-label">Chọn ngân hàng</span>
+            <div class="bank-pills">
+                <div class="bank-pill active" data-bankid="TCB" data-acc="19073015796012" onclick="selectAtmBank(this)">
+                    <div class="bp-name">🏦 Techcombank</div>
+                    <div class="bp-acc">19073015796012</div>
+                </div>
+                <div class="bank-pill" data-bankid="MB" data-acc="0365905426" onclick="selectAtmBank(this)">
+                    <div class="bp-name">🏦 MBBank</div>
+                    <div class="bp-acc">0365905426</div>
+                </div>
+            </div>
+            <p class="bank-sel-label" id="atm-bank-label">✅ Đang chọn: Techcombank — TK: 19073015796012</p>
+        </div>
+
+        <!-- Amount -->
+        <div class="atm-card">
+            <span class="atm-label">Số tiền (VND)</span>
+            <input class="atm-input" type="number" id="atm-amount" placeholder="Ví dụ: 50000" oninput="updateAtmAmount()">
+            <p class="amount-hint" id="atm-amount-hint">Đang nhập: 0 VND</p>
+        </div>
+
+        <!-- Content -->
+        <div class="atm-card">
+            <span class="atm-label">Nội dung chuyển khoản</span>
+            <input class="atm-input" type="text" id="atm-content" value="LE VAN LINH DZ" placeholder="Nội dung...">
+        </div>
+
+        <!-- Buttons -->
+        <button class="atm-btn" onclick="createAtmQR()">⚡ Tạo QR</button>
+        <button class="atm-btn-dl" id="atm-dl-btn" onclick="downloadAtmQR()">⬇ Tải QR về máy</button>
+
+        <!-- Canvas result -->
+        <div class="qr-canvas-wrap" id="atm-canvas-wrap">
+            <canvas id="qrCanvas"></canvas>
+            <p class="receiver-note">Người nhận: <strong>Lê Văn Linh</strong></p>
+        </div>
+    </div>
+</div>
+
+<!-- ============================== -->
+<!--       BUILDSHOP SECTION        -->
+<!-- ============================== -->
+<div id="shop" class="section">
+    <div class="shop-wrap">
+        <h2 class="shop-title">BÁO GIÁ WEBSITE</h2>
+        <p class="shop-sub">Thiết kế website chuyên nghiệp — Cypher234</p>
+
+        <!-- Domain -->
+        <div class="shop-card">
+            <h3>1. Tên miền</h3>
+            <input class="shop-input" type="text" id="shop-domain" placeholder="Tên miền của bạn (VD: myshop)">
+            <div class="atm-label" style="margin-top:14px;margin-bottom:8px;">Chọn đuôi miền</div>
+            <div class="ext-grid" id="ext-grid">
+                <div class="ext-opt active" data-ext=".shop" data-price="75000" onclick="selectExt(this)">
+                    <div class="eo-name">.shop</div><div class="eo-price">75.000đ/năm</div>
+                </div>
+                <div class="ext-opt" data-ext=".com" data-price="250000" onclick="selectExt(this)">
+                    <div class="eo-name">.com</div><div class="eo-price">250.000đ/năm</div>
+                </div>
+                <div class="ext-opt" data-ext=".net" data-price="260000" onclick="selectExt(this)">
+                    <div class="eo-name">.net</div><div class="eo-price">260.000đ/năm</div>
+                </div>
+                <div class="ext-opt" data-ext=".vn" data-price="480000" onclick="selectExt(this)">
+                    <div class="eo-name">.vn</div><div class="eo-price">480.000đ/năm</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hosting -->
+        <div class="shop-card">
+            <h3>2. Gói Hosting</h3>
+            <select class="shop-select" id="shop-hosting" onchange="calcShop()">
+                <option value="8000">Gói 1 — 8.000đ/tháng (Basic)</option>
+                <option value="16000">Gói 2 — 16.000đ/tháng (Standard)</option>
+                <option value="24000">Gói 3 — 24.000đ/tháng (Pro)</option>
+                <option value="32000">Gói 4 — 32.000đ/tháng (Premium)</option>
+            </select>
+        </div>
+
+        <!-- Add-ons -->
+        <div class="shop-card">
+            <h3>3. Dịch vụ thêm</h3>
+            <div class="cb-row" onclick="toggleShopCb('shop-api')">
+                <input type="checkbox" id="shop-api" onchange="calcShop()">
+                <label for="shop-api">
+                    API Auto Bank — <span class="cb-price">35.000đ/tháng</span>
+                    <small style="display:block;color:var(--muted);font-weight:400;font-size:0.8rem;">Tự động đối soát thanh toán</small>
+                </label>
+            </div>
+        </div>
+
+        <!-- Design fee -->
+        <div class="shop-card">
+            <h3>4. Tiền công thiết kế</h3>
+            <p style="color:var(--muted);font-size:0.85rem;margin-bottom:10px;">Cố định theo yêu cầu, liên hệ để được báo giá chính xác.</p>
+            <input class="shop-input" type="number" id="shop-design" placeholder="Nhập tiền công thiết kế (VND)..." oninput="calcShop()">
+        </div>
+
+        <!-- Summary -->
+        <div class="shop-card">
+            <h3>📊 Tổng Chi Phí</h3>
+            <div class="summary-box">
+                <div class="sum-row"><span class="sl">Tên miền</span><span class="sv" id="ss-domain">75.000đ (.shop/năm)</span></div>
+                <div class="sum-row"><span class="sl">Hosting</span><span class="sv" id="ss-hosting">8.000đ/tháng</span></div>
+                <div class="sum-row"><span class="sl">API Auto Bank</span><span class="sv" id="ss-api">—</span></div>
+                <div class="sum-row"><span class="sl">Tiền công thiết kế</span><span class="sv" id="ss-design">—</span></div>
+                <div class="sum-row total-row"><span class="sl">TỔNG / THÁNG ĐẦU</span><span class="sv" id="ss-total">83.000đ</span></div>
+            </div>
+            <button class="shop-btn" onclick="shopPay()">💳 Thanh Toán Ngay</button>
+
+            <!-- Payment box -->
+            <div class="pay-box" id="pay-box">
+                <p>Chuyển khoản theo thông tin dưới đây, sau đó gửi bill cho admin để nhận web.</p>
+                <p>Ngân hàng: <strong>Techcombank</strong></p>
+                <p>Chủ tài khoản: <strong>LÊ VĂN LINH</strong></p>
+                <p>Số tài khoản: <strong>19073015796012</strong></p>
+                <div class="pay-amount" id="pay-amount-text">—</div>
+                <img id="shop-qr-img" src="" alt="QR Thanh Toán">
+                <br>
+                <a class="demo-link" href="https://cypher234.shop" target="_blank">🌐 Xem Demo: Cypher234.shop</a>
+
+                <div style="margin-top:16px;">
+                    <div class="atm-label" style="text-align:left;">✨ Ưu điểm website</div>
+                    <div class="features-grid">
+                        <div class="feat-item">Login nhanh bằng Google</div>
+                        <div class="feat-item">API Auto Bank tự đối soát</div>
+                        <div class="feat-item">QR thanh toán tức thì</div>
+                        <div class="feat-item">Chuẩn SEO</div>
+                        <div class="feat-item">Hiển thị đẹp mobile</div>
+                        <div class="feat-item">Hỗ trợ 24/7</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Toast -->
+<div id="toast" class="toast"></div>
+
+<!-- Chatbot toggle -->
+<button id="cypher-toggle" aria-label="Open chat">💬</button>
+<div id="cypher-panel" role="dialog" aria-label="Cypher AI Chat">
+    <div id="cypher-header">🤖 Cypher AI — Hỗ trợ</div>
+    <div id="cypher-messages" class="clearfix" aria-live="polite"></div>
+    <div id="cypher-input">
+        <input id="cypher-text" placeholder="Viết gì đó..." />
+        <button id="cypher-send">Gửi</button>
+    </div>
+</div>
+
+<!-- ===== SCRIPTS ===== -->
+<script>
+    /* ---- Tab switching ---- */
+    function showTab(id, btn) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        btn.classList.add('active');
+        window.scrollTo({top: 0, behavior: 'smooth'});
+    }
+
+    /* ---- Toast ---- */
+    function showToast(msg){
+        const t=document.getElementById('toast');
+        t.textContent=msg;
+        t.classList.add('show');
+        clearTimeout(window._tt);
+        window._tt=setTimeout(()=>t.classList.remove('show'),2400);
+    }
+    window.showToast = showToast;
+
+    /* ---- Copy bank rows ---- */
+    document.querySelectorAll('.copy-target').forEach(row => {
+        row.addEventListener('click', function() {
+            navigator.clipboard.writeText(this.getAttribute('data-copy-text')).then(()=>{
+                showToast('✅ Đã sao chép: ' + this.getAttribute('data-copy-text'));
+            });
+        });
+    });
+
+    /* ========== ATM / QR ========== */
+    let atmBankId  = 'TCB';
+    let atmBankAcc = '19073015796012';
+
+    function selectAtmBank(el) {
+        document.querySelectorAll('.bank-pill').forEach(p => p.classList.remove('active'));
+        el.classList.add('active');
+        atmBankId  = el.dataset.bankid;
+        atmBankAcc = el.dataset.acc;
+        const names = { 'TCB': 'Techcombank', 'MB': 'MBBank' };
+        document.getElementById('atm-bank-label').textContent =
+            '✅ Đang chọn: ' + names[atmBankId] + ' — TK: ' + atmBankAcc;
+        // reset canvas if already shown
+        const wrap = document.getElementById('atm-canvas-wrap');
+        wrap.classList.remove('show');
+        document.getElementById('atm-dl-btn').style.display = 'none';
+        const ctx = document.getElementById('qrCanvas').getContext('2d');
+        ctx.clearRect(0, 0, 9999, 9999);
+    }
+
+    function updateAtmAmount() {
+        const v = parseInt(document.getElementById('atm-amount').value) || 0;
+        document.getElementById('atm-amount-hint').textContent =
+            'Đang nhập: ' + v.toLocaleString('vi-VN') + ' VND';
+    }
+
+    function createAtmQR() {
+        const amount  = document.getElementById('atm-amount').value;
+        const content = document.getElementById('atm-content').value;
+        if (!amount || Number(amount) <= 0) {
+            showToast('⚠️ Vui lòng nhập số tiền hợp lệ!');
+            return;
+        }
+        const url =
+            'https://img.vietqr.io/image/' +
+            atmBankId + '-' + atmBankAcc +
+            '-qr_only.png' +
+            '?amount=' + amount +
+            '&addInfo=' + encodeURIComponent(content) +
+            '&accountName=' + encodeURIComponent('Le Van Linh');
+
+        const canvas = document.getElementById('qrCanvas');
+        const ctx    = canvas.getContext('2d');
+        const img    = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = () => {
+            canvas.width  = img.width;
+            canvas.height = img.height;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0);
+            document.getElementById('atm-canvas-wrap').classList.add('show');
+            document.getElementById('atm-dl-btn').style.display = 'block';
+            showToast('✅ Đã tạo QR thành công!');
+        };
+        img.onerror = () => { showToast('❌ Không thể tải ảnh QR. Kiểm tra kết nối mạng!'); };
+        img.src = url;
+    }
+
+    function downloadAtmQR() {
+        const canvas = document.getElementById('qrCanvas');
+        const bank   = atmBankId;
+        const amount = document.getElementById('atm-amount').value || '0';
+        const a = document.createElement('a');
+        a.download = 'QR_' + bank + '_' + amount + 'VND.png';
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+        showToast('⬇ Đang tải QR...');
+    }
+
+    /* ========== BUILDSHOP ========== */
+    let shopExtPrice = 75000, shopExtName = '.shop';
+
+    function selectExt(el) {
+        document.querySelectorAll('.ext-opt').forEach(e => e.classList.remove('active'));
+        el.classList.add('active');
+        shopExtPrice = parseInt(el.dataset.price);
+        shopExtName = el.dataset.ext;
+        calcShop();
+    }
+
+    function toggleShopCb(id) {
+        const cb = document.getElementById(id);
+        cb.checked = !cb.checked;
+        calcShop();
+    }
+
+    function calcShop() {
+        const hosting = parseInt(document.getElementById('shop-hosting').value);
+        const api = document.getElementById('shop-api').checked ? 35000 : 0;
+        const design = parseInt(document.getElementById('shop-design').value) || 0;
+        const total = shopExtPrice + hosting + api + design;
+        document.getElementById('ss-domain').textContent = shopExtPrice.toLocaleString('vi-VN') + 'đ (' + shopExtName + '/năm)';
+        document.getElementById('ss-hosting').textContent = hosting.toLocaleString('vi-VN') + 'đ/tháng';
+        document.getElementById('ss-api').textContent = api ? '35.000đ/tháng' : '—';
+        document.getElementById('ss-design').textContent = design ? design.toLocaleString('vi-VN') + 'đ' : '—';
+        document.getElementById('ss-total').textContent = total.toLocaleString('vi-VN') + 'đ';
+    }
+
+    function shopPay() {
+        const total = document.getElementById('ss-total').textContent;
+        const rawAmt = total.replace(/[^\d]/g, '');
+        const domain = (document.getElementById('shop-domain').value.trim() || 'website') + shopExtName;
+        const note = encodeURIComponent('Thanh toan website ' + domain);
+        const qrUrl = `https://img.vietqr.io/image/970407-19073015796012-compact2.png?amount=${rawAmt}&addInfo=${note}&accountName=LE%20VAN%20LINH`;
+        document.getElementById('shop-qr-img').src = qrUrl;
+        document.getElementById('pay-amount-text').textContent = total;
+        const box = document.getElementById('pay-box');
+        box.classList.add('show');
+        box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        showToast('💳 Thông tin thanh toán đã sẵn sàng!');
+    }
+
+    calcShop();
+</script>
+
+<!-- Firebase + Comments (original code) -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import {
+        getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import {
+        getFirestore, collection, addDoc, getDocs, query, orderBy, where, serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyCb3sLxKk8_l6UT3hfcy_JXOs33bQrWb60",
+        authDomain: "cypherdev-21611.firebaseapp.com",
+        projectId: "cypherdev-21611",
+        storageBucket: "cypherdev-21611.firebasestorage.app",
+        messagingSenderId: "108470103585",
+        appId: "1:108470103585:web:98b72f0513d2af55087d60",
+        measurementId: "G-CD1R2G24E2"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const provider = new GoogleAuthProvider();
+    const db = getFirestore(app);
+    const commentsRef = collection(db, "comments");
+
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const commentInput = document.getElementById("commentInput");
+    const sendCommentBtn = document.getElementById("sendComment");
+    const commentList = document.getElementById("commentList");
+
+    let currentUser = null;
+    let hasCommented = false;
+    let isLoadingComments = false;
+
+    async function checkIfUserCommented(uid) {
+        try {
+            const q = query(commentsRef, where("uid", "==", uid));
+            const snapshot = await getDocs(q);
+            return !snapshot.empty;
+        } catch (e) { return false; }
+    }
+
+    async function loadComments() {
+        if (isLoadingComments) return;
+        isLoadingComments = true;
+        commentList.innerHTML = "<li style='color:var(--muted); text-align:center;'>Đang tải bình luận...</li>";
+        try {
+            const q = query(commentsRef, orderBy("timestamp", "desc"));
+            const snapshot = await getDocs(q);
+            commentList.innerHTML = "";
+            if (snapshot.empty) {
+                commentList.innerHTML = "<li style='color:var(--muted); text-align:center;'>Chưa có bình luận nào.</li>";
+                return;
+            }
+            snapshot.forEach((doc) => {
+                const data = doc.data();
+                const li = document.createElement("li");
+                let timeDisplay = '';
+                if (data.timestamp && typeof data.timestamp.toDate === 'function') {
+                    const date = data.timestamp.toDate();
+                    timeDisplay = `${date.toLocaleTimeString("vi-VN")} ${date.toLocaleDateString("vi-VN")}`;
+                } else { timeDisplay = 'Đang cập nhật...'; }
+                li.innerHTML = `
+                    <div class="comment-meta">
+                        <img src="${data.photoURL || 'https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png'}" alt="Avatar">
+                        <strong>${data.username}</strong>
+                    </div>
+                    <span class="comment-text">${data.comment}</span>
+                    <small class="comment-time">${timeDisplay}</small>`;
+                commentList.appendChild(li);
+            });
+        } catch (e) {
+            commentList.innerHTML = "<li style='color:red;'>Không thể tải bình luận.</li>";
+        } finally {
+            isLoadingComments = false;
+        }
+    }
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            currentUser = user;
+            loginBtn.style.display = "none";
+            logoutBtn.style.display = "block";
+            checkIfUserCommented(user.uid).then(commented => {
+                hasCommented = commented;
+                if (hasCommented) {
+                    commentInput.disabled = true;
+                    sendCommentBtn.disabled = true;
+                    commentInput.placeholder = "Bạn đã bình luận một lần.";
+                } else {
+                    commentInput.disabled = false;
+                    sendCommentBtn.disabled = false;
+                    commentInput.placeholder = "Nhập bình luận...";
+                }
+            });
+            loadComments();
+        } else {
+            currentUser = null;
+            hasCommented = false;
+            loginBtn.style.display = "block";
+            logoutBtn.style.display = "none";
+            sendCommentBtn.disabled = true;
+            commentInput.disabled = true;
+            commentInput.placeholder = "Vui lòng đăng nhập để bình luận.";
+            loadComments();
+        }
+    });
+
+    loginBtn.addEventListener("click", async () => {
+        try { await signInWithPopup(auth, provider); }
+        catch (error) { window.showToast("❌ Đăng nhập thất bại."); }
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+        try { await signOut(auth); }
+        catch (error) { window.showToast("❌ Lỗi khi đăng xuất."); }
+    });
+
+    sendCommentBtn.addEventListener("click", async () => {
+        if (!currentUser || hasCommented) { window.showToast("⚠️ Bạn không thể bình luận lúc này."); return; }
+        const text = commentInput.value.trim();
+        if (!text) { window.showToast("⚠️ Bình luận không được để trống."); return; }
+        sendCommentBtn.disabled = true;
+        commentInput.disabled = true;
+        try {
+            await addDoc(commentsRef, {
+                uid: currentUser.uid,
+                username: currentUser.displayName || "Ẩn danh",
+                photoURL: currentUser.photoURL || "https://upload.wikimedia.org/wikipedia/commons/7/7c/Profile_avatar_placeholder_large.png",
+                comment: text,
+                timestamp: serverTimestamp()
+            });
+            commentInput.value = "";
+            hasCommented = true;
+            commentInput.placeholder = "Bạn đã bình luận một lần.";
+            window.showToast("✅ Bình luận đã được gửi!");
+            loadComments();
+        } catch (e) {
+            window.showToast("❌ Gửi bình luận thất bại.");
+            commentInput.disabled = false;
+            sendCommentBtn.disabled = false;
+        }
+    });
+
+    loadComments();
+</script>
+
+<!-- Chatbot (original code) -->
+<script>
+(function(){
+    const PROXY_URL = "https://cypher234.shop/public/proxy.php";
+    const toggle = document.getElementById("cypher-toggle");
+    const panel = document.getElementById("cypher-panel");
+    const msgBox = document.getElementById("cypher-messages");
+    const input = document.getElementById("cypher-text");
+    const sendBtn = document.getElementById("cypher-send");
+    if (!toggle || !panel || !msgBox || !input || !sendBtn) return;
+
+    toggle.addEventListener("click", () => {
+        panel.style.display = panel.style.display === "flex" ? "none" : "flex";
+        if (panel.style.display === "flex") {
+            input.focus();
+            if (msgBox.children.length === 0) {
+                append("Xin chào! Tôi là AI Cypher, tôi có thể giúp gì cho bạn? Hãy hỏi về dịch vụ của Linh nhé.", "cy-bot");
+            }
+        }
+    });
+
+    sendBtn.addEventListener("click", sendMessage);
+    input.addEventListener("keypress", (e) => { if (e.key === "Enter") { e.preventDefault(); sendMessage(); } });
+
+    function append(text, cls) {
+        const wrapper = document.createElement("div");
+        wrapper.className = "clearfix";
+        const d = document.createElement("div");
+        d.className = "cy-msg " + (cls || "cy-bot");
+        d.innerText = text;
+        wrapper.appendChild(d);
+        msgBox.appendChild(wrapper);
+        msgBox.scrollTop = msgBox.scrollHeight;
+    }
+
+    let isWaiting = false;
+    async function sendMessage() {
+        if (isWaiting) return;
+        const t = input.value.trim();
+        if (!t) return;
+        append(t, "cy-user");
+        input.value = "";
+        append("⏳ Đang xử lý...", "cy-bot");
+        isWaiting = true;
+        input.disabled = true;
+        sendBtn.disabled = true;
+        try {
+            const res = await fetch(PROXY_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ inputs: t })
+            });
+            const statusNodes = Array.from(msgBox.querySelectorAll(".cy-msg.cy-bot")).filter(n => n.innerText.includes("Đang xử lý"));
+            statusNodes.forEach(n => n.parentElement.remove());
+            if (!res.ok) throw new Error(`Lỗi HTTP ${res.status}.`);
+            const text = await res.text();
+            let data;
+            try { data = JSON.parse(text); } catch(e) { data = text; }
+            let reply = "Xin lỗi, đã xảy ra lỗi.";
+            if (Array.isArray(data) && data[0] && data[0].generated_text !== undefined) {
+                reply = data[0].generated_text.trim() || "Tôi không hiểu, bạn có thể diễn đạt lại không?";
+            } else if (data && typeof data === "object" && data.error) {
+                reply = "Lỗi AI: " + data.error;
+            } else if (typeof data === "string") { reply = data; }
+            if (reply.startsWith(t)) reply = reply.substring(t.length).trim();
+            append(reply, "cy-bot");
+        } catch (err) {
+            const statusNodes = Array.from(msgBox.querySelectorAll(".cy-msg.cy-bot")).filter(n => n.innerText.includes("Đang xử lý"));
+            statusNodes.forEach(n => n.parentElement.remove());
+            append(`⚠️ Lỗi kết nối: ${err.message}`, "cy-bot");
+        } finally {
+            isWaiting = false;
+            input.disabled = false;
+            sendBtn.disabled = false;
+            input.focus();
+        }
+    }
+
+    document.addEventListener("keydown", e => { if (e.key === "Escape") panel.style.display = "none"; });
+})();
+</script>
+
+</body>
+</html>
