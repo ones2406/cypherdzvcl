@@ -196,66 +196,147 @@
         .receiver-note strong { color: var(--accent); }
 
         /* ===== BUILDSHOP ===== */
-        .shop-wrap { max-width: 720px; margin: 0 auto; padding: 36px 20px; }
+        .shop-wrap { max-width: 960px; margin: 0 auto; padding: 36px 20px 60px; }
         .shop-title { font-size: 1.6rem; font-weight: 700; color: var(--accent); text-align: center; margin-bottom: 6px; }
-        .shop-sub { text-align: center; color: var(--muted); font-size: 0.88rem; margin-bottom: 28px; }
+        .shop-sub { text-align: center; color: var(--muted); font-size: 0.88rem; margin-bottom: 32px; }
+
+        /* 2-column layout on desktop */
+        .shop-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media(max-width:760px){ .shop-cols { grid-template-columns: 1fr; } }
+
         .shop-card { background: var(--card-bg); border-radius: 14px; padding: 22px; margin-bottom: 16px; box-shadow: 0 6px 30px rgba(2,6,12,0.6); }
-        .shop-card h3 { color: var(--accent); font-size: 0.82rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 14px; }
-        .ext-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .shop-card h3 {
+            color: var(--accent); font-size: 0.78rem; font-weight: 700;
+            letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 14px;
+            display: flex; align-items: center; gap: 7px;
+        }
+        .shop-card h3 .step-num {
+            width: 22px; height: 22px; border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #041225; font-size: 0.7rem; font-weight: 900;
+            display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+        }
+
+        /* Domain extension grid */
+        .ext-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
         .ext-opt {
-            background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.07);
-            border-radius: 10px; padding: 10px 6px; text-align: center; cursor: pointer;
+            background: rgba(255,255,255,0.02); border: 2px solid rgba(255,255,255,0.07);
+            border-radius: 10px; padding: 11px 8px; text-align: center; cursor: pointer;
             transition: .2s; user-select: none;
         }
-        .ext-opt .eo-name { font-size: 0.9rem; font-weight: 700; color: var(--text); }
+        .ext-opt .eo-name { font-size: 1rem; font-weight: 700; color: var(--text); }
         .ext-opt .eo-price { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
-        .ext-opt.active { border-color: var(--accent-2); color: var(--accent-2); background: rgba(124,77,255,0.1); box-shadow: 0 0 14px rgba(124,77,255,0.25); }
+        .ext-opt.active { border-color: var(--accent-2); background: rgba(124,77,255,0.1); box-shadow: 0 0 16px rgba(124,77,255,0.2); }
         .ext-opt.active .eo-name { color: var(--accent-2); }
+        .ext-opt.active .eo-price { color: rgba(124,77,255,0.8); }
+
+        /* Hosting pills */
+        .host-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; }
+        .host-opt {
+            background: rgba(255,255,255,0.02); border: 2px solid rgba(255,255,255,0.07);
+            border-radius: 10px; padding: 11px 8px; text-align: center; cursor: pointer;
+            transition: .2s; user-select: none;
+        }
+        .host-opt .ho-name { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+        .host-opt .ho-price { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+        .host-opt.active { border-color: var(--success); background: rgba(75,226,122,0.07); box-shadow: 0 0 14px rgba(75,226,122,0.15); }
+        .host-opt.active .ho-name { color: var(--success); }
+        .host-opt.active .ho-price { color: rgba(75,226,122,0.7); }
+
+        /* Inputs */
         .shop-input {
             width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08);
             border-radius: 10px; padding: 12px 14px; color: var(--text); font-family: 'Poppins', sans-serif;
-            font-size: 0.95rem; outline: none; transition: border-color .2s; margin-bottom: 2px;
+            font-size: 0.95rem; outline: none; transition: border-color .2s, box-shadow .2s;
         }
-        .shop-input:focus { border-color: var(--accent); }
-        .shop-select {
-            width: 100%; background: rgba(0,0,0,0.5); border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 10px; padding: 12px 14px; color: var(--text); font-family: 'Poppins', sans-serif;
-            font-size: 0.92rem; outline: none; appearance: none; cursor: pointer;
+        .shop-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,196,255,0.1); }
+        .shop-input-hint { font-size: 0.78rem; color: var(--muted); margin-top: 5px; }
+
+        /* Domain preview badge */
+        .domain-preview {
+            display: inline-block; margin-top: 8px;
+            background: rgba(0,196,255,0.08); border: 1px solid rgba(0,196,255,0.2);
+            border-radius: 8px; padding: 5px 12px;
+            font-size: 0.85rem; font-weight: 700; color: var(--accent);
+            min-height: 30px; word-break: break-all;
         }
+
+        /* Addon toggle row */
         .cb-row {
-            display: flex; align-items: center; gap: 12px;
-            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07);
-            border-radius: 10px; padding: 12px 14px; cursor: pointer; margin-bottom: 8px; transition: .2s;
+            display: flex; align-items: flex-start; gap: 12px;
+            background: rgba(255,255,255,0.02); border: 2px solid rgba(255,255,255,0.07);
+            border-radius: 10px; padding: 13px 14px; cursor: pointer; transition: .2s;
         }
-        .cb-row:hover { border-color: rgba(0,196,255,0.3); }
-        .cb-row input[type="checkbox"] { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; }
+        .cb-row:hover { border-color: rgba(0,196,255,0.25); }
+        .cb-row.cb-checked { border-color: var(--accent); background: rgba(0,196,255,0.06); }
+        .cb-row input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; flex-shrink: 0; margin-top: 2px; }
         .cb-row label { cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text); flex: 1; }
-        .cb-row .cb-price { color: var(--accent); font-weight: 700; font-size: 0.85rem; }
-        .summary-box { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 14px; }
-        .sum-row { display: flex; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.9rem; }
+        .cb-row .cb-price { color: var(--accent); font-weight: 700; }
+        .cb-row .cb-desc { display: block; font-size: 0.78rem; color: var(--muted); font-weight: 400; margin-top: 2px; }
+
+        /* Design fee fixed badge */
+        .fee-badge {
+            display: flex; align-items: center; justify-content: space-between;
+            background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 10px; padding: 13px 14px;
+        }
+        .fee-badge .fb-label { font-size: 0.88rem; color: var(--muted); }
+        .fee-badge .fb-value { font-size: 1rem; font-weight: 700; color: var(--text); }
+
+        /* Right column — summary + payment */
+        .summary-box { background: rgba(0,0,0,0.35); border-radius: 12px; padding: 16px; }
+        .sum-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; }
         .sum-row:last-child { border-bottom: none; }
         .sum-row .sl { color: var(--muted); }
         .sum-row .sv { font-weight: 700; color: var(--text); }
-        .sum-row.total-row .sl { color: var(--accent); font-weight: 700; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.08em; }
-        .sum-row.total-row .sv { color: var(--accent); font-size: 1.1rem; font-weight: 700; }
+        .sum-row.total-row { margin-top: 4px; }
+        .sum-row.total-row .sl { color: var(--accent); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
+        .sum-row.total-row .sv { color: var(--accent); font-size: 1.15rem; }
+
         .shop-btn {
-            width: 100%; padding: 13px; border: none; border-radius: 10px;
+            width: 100%; padding: 14px; border: none; border-radius: 10px;
             background: linear-gradient(90deg, var(--accent), var(--accent-2));
-            color: #041225; font-family: 'Poppins', sans-serif; font-size: 0.9rem; font-weight: 700;
-            cursor: pointer; transition: .25s; margin-top: 14px;
+            color: #041225; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; transition: .25s; margin-top: 16px; letter-spacing: 0.04em;
         }
-        .shop-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
-        .pay-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(0,196,255,0.15); border-radius: 12px; padding: 18px; text-align: center; margin-top: 14px; display: none; }
-        .pay-box.show { display: block; animation: fadeUp .3s ease; }
-        .pay-box p { color: var(--muted); font-size: 0.88rem; line-height: 1.7; margin-bottom: 6px; }
-        .pay-box p strong { color: var(--text); }
-        .pay-box .pay-amount { font-size: 1.2rem; font-weight: 700; color: var(--accent); margin: 8px 0; }
-        .pay-box img { width: 180px; height: 180px; border-radius: 12px; border: 2px solid rgba(0,196,255,0.2); box-shadow: 0 0 24px rgba(0,196,255,0.2); margin-top: 12px; }
-        .demo-link { display: inline-block; margin-top: 12px; padding: 9px 18px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.88rem; transition: .2s; }
+        .shop-btn:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(0,196,255,0.3); }
+        .shop-btn:active { transform: translateY(0); }
+        .shop-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+        /* Payment info panel */
+        .pay-panel { display: none; margin-top: 16px; animation: fadeUp .35s ease; }
+        .pay-panel.show { display: block; }
+        .pay-bank-rows { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 2px 0; margin-bottom: 12px; }
+        .pay-bank-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 10px 14px; border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer; transition: .2s; border-radius: 8px;
+        }
+        .pay-bank-row:last-child { border-bottom: none; }
+        .pay-bank-row:hover { background: rgba(0,196,255,0.07); }
+        .pay-bank-row .pb-label { color: var(--muted); font-size: 0.85rem; }
+        .pay-bank-row .pb-value { font-weight: 700; color: var(--text); font-size: 0.9rem; }
+        .pay-total-badge {
+            text-align: center; padding: 10px;
+            background: rgba(0,196,255,0.08); border: 1px solid rgba(0,196,255,0.2);
+            border-radius: 10px; margin-bottom: 12px;
+        }
+        .pay-total-badge .ptb-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
+        .pay-total-badge .ptb-val { font-size: 1.3rem; font-weight: 700; color: var(--accent); margin-top: 2px; }
+        .pay-qr-wrap { text-align: center; margin: 12px 0; position: relative; }
+        .pay-qr-wrap::before {
+            content: ''; position: absolute; inset: -8px; border-radius: 20px;
+            background: conic-gradient(from 0deg, rgba(0,196,255,0.3), rgba(124,77,255,0.3));
+            filter: blur(12px); animation: spin 8s linear infinite; z-index: 0;
+        }
+        .pay-qr-wrap img { position: relative; z-index: 1; width: 180px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1); }
+        .pay-hint { font-size: 0.8rem; color: var(--muted); text-align: center; line-height: 1.6; margin-bottom: 10px; }
+
+        .demo-link { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.1); color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.88rem; transition: .2s; margin-bottom: 12px; }
         .demo-link:hover { border-color: var(--accent); color: var(--accent); }
-        .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
-        .feat-item { display: flex; align-items: center; gap: 7px; font-size: 0.85rem; color: var(--muted); }
-        .feat-item::before { content: '✓'; color: var(--success); font-weight: 700; flex-shrink: 0; }
+        .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+        .feat-item { display: flex; align-items: center; gap: 7px; font-size: 0.82rem; color: var(--muted); }
+        .feat-item::before { content: '✓'; color: var(--success); font-weight: 900; flex-shrink: 0; }
 
         /* ===== Chatbot ===== */
         #cypher-toggle { position: fixed; bottom: 24px; right: 24px; width:56px; height:56px; border-radius:50%; background: linear-gradient(135deg,#00c6ff,#0072ff); color:#fff; border:none; z-index:10050; cursor:pointer; box-shadow:0 8px 30px rgba(0,0,0,0.35); display:flex; align-items:center; justify-content:center; font-size:22px; transition: transform 0.3s ease; }
@@ -431,96 +512,160 @@
 <div id="shop" class="section">
     <div class="shop-wrap">
         <h2 class="shop-title">BÁO GIÁ WEBSITE</h2>
-        <p class="shop-sub">Thiết kế website chuyên nghiệp — Cypher234</p>
+        <p class="shop-sub">Thiết kế website chuyên nghiệp — nhanh, rẻ, uy tín</p>
 
-        <!-- Domain -->
-        <div class="shop-card">
-            <h3>1. Tên miền</h3>
-            <input class="shop-input" type="text" id="shop-domain" placeholder="Tên miền của bạn (VD: myshop)">
-            <div class="atm-label" style="margin-top:14px;margin-bottom:8px;">Chọn đuôi miền</div>
-            <div class="ext-grid" id="ext-grid">
-                <div class="ext-opt active" data-ext=".shop" data-price="75000" onclick="selectExt(this)">
-                    <div class="eo-name">.shop</div><div class="eo-price">75.000đ/năm</div>
+        <div class="shop-cols">
+
+            <!-- ===== LEFT COLUMN — Form ===== -->
+            <div>
+
+                <!-- Domain name -->
+                <div class="shop-card">
+                    <h3><span class="step-num">1</span> Tên miền</h3>
+                    <input class="shop-input" type="text" id="shop-domain"
+                        placeholder="Nhập tên miền (vd: cypher234)"
+                        oninput="updateDomainPreview()">
+                    <p class="shop-input-hint">Chỉ nhập phần tên, chưa cần đuôi miền.</p>
+                    <div class="domain-preview" id="domain-preview">—</div>
                 </div>
-                <div class="ext-opt" data-ext=".com" data-price="250000" onclick="selectExt(this)">
-                    <div class="eo-name">.com</div><div class="eo-price">250.000đ/năm</div>
-                </div>
-                <div class="ext-opt" data-ext=".net" data-price="260000" onclick="selectExt(this)">
-                    <div class="eo-name">.net</div><div class="eo-price">260.000đ/năm</div>
-                </div>
-                <div class="ext-opt" data-ext=".vn" data-price="480000" onclick="selectExt(this)">
-                    <div class="eo-name">.vn</div><div class="eo-price">480.000đ/năm</div>
-                </div>
-            </div>
-        </div>
 
-        <!-- Hosting -->
-        <div class="shop-card">
-            <h3>2. Gói Hosting</h3>
-            <select class="shop-select" id="shop-hosting" onchange="calcShop()">
-                <option value="8000">Gói 1 — 8.000đ/tháng (Basic)</option>
-                <option value="16000">Gói 2 — 16.000đ/tháng (Standard)</option>
-                <option value="24000">Gói 3 — 24.000đ/tháng (Pro)</option>
-                <option value="32000">Gói 4 — 32.000đ/tháng (Premium)</option>
-            </select>
-        </div>
-
-        <!-- Add-ons -->
-        <div class="shop-card">
-            <h3>3. Dịch vụ thêm</h3>
-            <div class="cb-row" onclick="toggleShopCb('shop-api')">
-                <input type="checkbox" id="shop-api" onchange="calcShop()">
-                <label for="shop-api">
-                    API Auto Bank — <span class="cb-price">35.000đ/tháng</span>
-                    <small style="display:block;color:var(--muted);font-weight:400;font-size:0.8rem;">Tự động đối soát thanh toán</small>
-                </label>
-            </div>
-        </div>
-
-        <!-- Design fee -->
-        <div class="shop-card">
-            <h3>4. Tiền công thiết kế</h3>
-            <p style="color:var(--muted);font-size:0.85rem;margin-bottom:10px;">Cố định theo yêu cầu, liên hệ để được báo giá chính xác.</p>
-            <input class="shop-input" type="number" id="shop-design" placeholder="Nhập tiền công thiết kế (VND)..." oninput="calcShop()">
-        </div>
-
-        <!-- Summary -->
-        <div class="shop-card">
-            <h3>📊 Tổng Chi Phí</h3>
-            <div class="summary-box">
-                <div class="sum-row"><span class="sl">Tên miền</span><span class="sv" id="ss-domain">75.000đ (.shop/năm)</span></div>
-                <div class="sum-row"><span class="sl">Hosting</span><span class="sv" id="ss-hosting">8.000đ/tháng</span></div>
-                <div class="sum-row"><span class="sl">API Auto Bank</span><span class="sv" id="ss-api">—</span></div>
-                <div class="sum-row"><span class="sl">Tiền công thiết kế</span><span class="sv" id="ss-design">—</span></div>
-                <div class="sum-row total-row"><span class="sl">TỔNG / THÁNG ĐẦU</span><span class="sv" id="ss-total">83.000đ</span></div>
-            </div>
-            <button class="shop-btn" onclick="shopPay()">💳 Thanh Toán Ngay</button>
-
-            <!-- Payment box -->
-            <div class="pay-box" id="pay-box">
-                <p>Chuyển khoản theo thông tin dưới đây, sau đó gửi bill cho admin để nhận web.</p>
-                <p>Ngân hàng: <strong>Techcombank</strong></p>
-                <p>Chủ tài khoản: <strong>LÊ VĂN LINH</strong></p>
-                <p>Số tài khoản: <strong>19073015796012</strong></p>
-                <div class="pay-amount" id="pay-amount-text">—</div>
-                <img id="shop-qr-img" src="" alt="QR Thanh Toán">
-                <br>
-                <a class="demo-link" href="https://cypher234.shop" target="_blank">🌐 Xem Demo: Cypher234.shop</a>
-
-                <div style="margin-top:16px;">
-                    <div class="atm-label" style="text-align:left;">✨ Ưu điểm website</div>
-                    <div class="features-grid">
-                        <div class="feat-item">Login nhanh bằng Google</div>
-                        <div class="feat-item">API Auto Bank tự đối soát</div>
-                        <div class="feat-item">QR thanh toán tức thì</div>
-                        <div class="feat-item">Chuẩn SEO</div>
-                        <div class="feat-item">Hiển thị đẹp mobile</div>
-                        <div class="feat-item">Hỗ trợ 24/7</div>
+                <!-- Domain extension -->
+                <div class="shop-card">
+                    <h3><span class="step-num">2</span> Đuôi miền</h3>
+                    <div class="ext-grid">
+                        <div class="ext-opt" data-ext=".com" data-price="250000" onclick="selectExt(this)">
+                            <div class="eo-name">.com</div><div class="eo-price">250.000đ/năm</div>
+                        </div>
+                        <div class="ext-opt" data-ext=".vn" data-price="480000" onclick="selectExt(this)">
+                            <div class="eo-name">.vn</div><div class="eo-price">480.000đ/năm</div>
+                        </div>
+                        <div class="ext-opt" data-ext=".net" data-price="260000" onclick="selectExt(this)">
+                            <div class="eo-name">.net</div><div class="eo-price">260.000đ/năm</div>
+                        </div>
+                        <div class="ext-opt active" data-ext=".shop" data-price="75000" onclick="selectExt(this)">
+                            <div class="eo-name">.shop</div><div class="eo-price">75.000đ/năm</div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
 
+                <!-- Hosting -->
+                <div class="shop-card">
+                    <h3><span class="step-num">3</span> Gói Hosting</h3>
+                    <div class="host-grid">
+                        <div class="host-opt active" data-price="8000" onclick="selectHost(this)">
+                            <div class="ho-name">Gói 1</div><div class="ho-price">8.000đ/tháng</div>
+                        </div>
+                        <div class="host-opt" data-price="16000" onclick="selectHost(this)">
+                            <div class="ho-name">Gói 2</div><div class="ho-price">16.000đ/tháng</div>
+                        </div>
+                        <div class="host-opt" data-price="24000" onclick="selectHost(this)">
+                            <div class="ho-name">Gói 3</div><div class="ho-price">24.000đ/tháng</div>
+                        </div>
+                        <div class="host-opt" data-price="32000" onclick="selectHost(this)">
+                            <div class="ho-name">Gói 4</div><div class="ho-price">32.000đ/tháng</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Addons -->
+                <div class="shop-card">
+                    <h3><span class="step-num">4</span> Dịch vụ thêm</h3>
+                    <div class="cb-row" id="api-row" onclick="toggleApi()">
+                        <input type="checkbox" id="shop-api" onchange="calcShop()">
+                        <label for="shop-api">
+                            API Auto Bank
+                            <span class="cb-price"> — 35.000đ/tháng</span>
+                            <span class="cb-desc">Tự động đối soát thanh toán qua ngân hàng</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Design fee (fixed) -->
+                <div class="shop-card">
+                    <h3><span class="step-num">5</span> Tiền công thiết kế</h3>
+                    <div class="fee-badge">
+                        <span class="fb-label">Cố định (mọi gói)</span>
+                        <span class="fb-value">300.000đ</span>
+                    </div>
+                    <p class="shop-input-hint" style="margin-top:8px;">Bao gồm setup, cài đặt và bàn giao đầy đủ.</p>
+                </div>
+
+            </div>
+
+            <!-- ===== RIGHT COLUMN — Summary + Payment ===== -->
+            <div>
+
+                <!-- Summary -->
+                <div class="shop-card">
+                    <h3>📊 Tổng Chi Phí Tháng Đầu</h3>
+                    <div class="summary-box">
+                        <div class="sum-row"><span class="sl">Tên miền</span><span class="sv" id="ss-domain">—</span></div>
+                        <div class="sum-row"><span class="sl">Hosting</span><span class="sv" id="ss-hosting">8.000đ/tháng</span></div>
+                        <div class="sum-row"><span class="sl">API Auto Bank</span><span class="sv" id="ss-api">—</span></div>
+                        <div class="sum-row"><span class="sl">Tiền công thiết kế</span><span class="sv">300.000đ</span></div>
+                        <div class="sum-row total-row">
+                            <span class="sl">TỔNG THÁNG ĐẦU</span>
+                            <span class="sv" id="ss-total">—</span>
+                        </div>
+                    </div>
+                    <button class="shop-btn" id="shop-pay-btn" onclick="shopPay()">💳 Tính & Thanh Toán</button>
+                </div>
+
+                <!-- Payment panel -->
+                <div class="pay-panel" id="pay-panel">
+                    <div class="shop-card">
+                        <h3>💳 Thông tin thanh toán</h3>
+
+                        <div class="pay-total-badge">
+                            <div class="ptb-label">Số tiền cần chuyển</div>
+                            <div class="ptb-val" id="pay-total-text">—</div>
+                        </div>
+
+                        <p class="pay-hint">
+                            Nhấn vào từng dòng để sao chép nhanh, sau đó chuyển khoản
+                            và gửi bill cho admin để nhận web.
+                        </p>
+
+                        <div class="pay-bank-rows">
+                            <div class="pay-bank-row" onclick="shopCopy('Techcombank')">
+                                <span class="pb-label">Ngân hàng</span>
+                                <span class="pb-value">Techcombank 📋</span>
+                            </div>
+                            <div class="pay-bank-row" onclick="shopCopy('LÊ VĂN LINH')">
+                                <span class="pb-label">Chủ tài khoản</span>
+                                <span class="pb-value">LÊ VĂN LINH 📋</span>
+                            </div>
+                            <div class="pay-bank-row" onclick="shopCopy('19073015796012')">
+                                <span class="pb-label">Số tài khoản</span>
+                                <span class="pb-value">19073015796012 📋</span>
+                            </div>
+                        </div>
+
+                        <div class="pay-qr-wrap">
+                            <img id="shop-qr-img" src="" alt="QR Thanh Toán">
+                        </div>
+
+                        <a class="demo-link" href="https://cypher234.shop" target="_blank">
+                            🌐 Xem Demo: Cypher234.shop
+                        </a>
+
+                        <div class="shop-card" style="background:rgba(0,0,0,0.2);padding:14px;margin:0;">
+                            <div class="atm-label" style="margin-bottom:10px;">✨ Ưu điểm website</div>
+                            <div class="features-grid">
+                                <div class="feat-item">Login nhanh bằng Google</div>
+                                <div class="feat-item">API Auto Bank tự đối soát</div>
+                                <div class="feat-item">QR thanh toán tức thì</div>
+                                <div class="feat-item">Chuẩn SEO</div>
+                                <div class="feat-item">Đẹp trên mobile</div>
+                                <div class="feat-item">Hỗ trợ 24/7</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div><!-- end shop-cols -->
     </div>
 </div>
 
@@ -639,45 +784,70 @@
 
     /* ========== BUILDSHOP ========== */
     let shopExtPrice = 75000, shopExtName = '.shop';
+    let shopHostPrice = 8000;
+    const DESIGN_FEE = 300000;
+
+    function updateDomainPreview() {
+        const name = document.getElementById('shop-domain').value.trim();
+        document.getElementById('domain-preview').textContent =
+            name ? name + shopExtName : '—';
+        calcShop();
+    }
 
     function selectExt(el) {
         document.querySelectorAll('.ext-opt').forEach(e => e.classList.remove('active'));
         el.classList.add('active');
         shopExtPrice = parseInt(el.dataset.price);
-        shopExtName = el.dataset.ext;
+        shopExtName  = el.dataset.ext;
+        updateDomainPreview();
+    }
+
+    function selectHost(el) {
+        document.querySelectorAll('.host-opt').forEach(e => e.classList.remove('active'));
+        el.classList.add('active');
+        shopHostPrice = parseInt(el.dataset.price);
         calcShop();
     }
 
-    function toggleShopCb(id) {
-        const cb = document.getElementById(id);
+    function toggleApi() {
+        const cb  = document.getElementById('shop-api');
+        const row = document.getElementById('api-row');
         cb.checked = !cb.checked;
+        row.classList.toggle('cb-checked', cb.checked);
         calcShop();
     }
 
     function calcShop() {
-        const hosting = parseInt(document.getElementById('shop-hosting').value);
-        const api = document.getElementById('shop-api').checked ? 35000 : 0;
-        const design = parseInt(document.getElementById('shop-design').value) || 0;
-        const total = shopExtPrice + hosting + api + design;
-        document.getElementById('ss-domain').textContent = shopExtPrice.toLocaleString('vi-VN') + 'đ (' + shopExtName + '/năm)';
-        document.getElementById('ss-hosting').textContent = hosting.toLocaleString('vi-VN') + 'đ/tháng';
-        document.getElementById('ss-api').textContent = api ? '35.000đ/tháng' : '—';
-        document.getElementById('ss-design').textContent = design ? design.toLocaleString('vi-VN') + 'đ' : '—';
-        document.getElementById('ss-total').textContent = total.toLocaleString('vi-VN') + 'đ';
+        const api    = document.getElementById('shop-api').checked ? 35000 : 0;
+        const total  = DESIGN_FEE + shopExtPrice + shopHostPrice + api;
+
+        document.getElementById('ss-domain').textContent  = shopExtPrice.toLocaleString('vi-VN') + 'đ (' + shopExtName + '/năm)';
+        document.getElementById('ss-hosting').textContent = shopHostPrice.toLocaleString('vi-VN') + 'đ/tháng';
+        document.getElementById('ss-api').textContent     = api ? '35.000đ/tháng' : '—';
+        document.getElementById('ss-total').textContent   = total.toLocaleString('vi-VN') + 'đ';
+        return total;
     }
 
     function shopPay() {
-        const total = document.getElementById('ss-total').textContent;
-        const rawAmt = total.replace(/[^\d]/g, '');
-        const domain = (document.getElementById('shop-domain').value.trim() || 'website') + shopExtName;
-        const note = encodeURIComponent('Thanh toan website ' + domain);
-        const qrUrl = `https://img.vietqr.io/image/970407-19073015796012-compact2.png?amount=${rawAmt}&addInfo=${note}&accountName=LE%20VAN%20LINH`;
+        const name = document.getElementById('shop-domain').value.trim();
+        if (!name) { showToast('⚠️ Vui lòng nhập tên miền!'); return; }
+
+        const total      = calcShop();
+        const fullDomain = name + shopExtName;
+        const note       = encodeURIComponent('ThanhToan ' + fullDomain);
+        const qrUrl      = `https://img.vietqr.io/image/TCB-19073015796012-compact2.png?amount=${total}&addInfo=${note}&accountName=${encodeURIComponent('Le Van Linh')}`;
+
+        document.getElementById('pay-total-text').textContent = total.toLocaleString('vi-VN') + 'đ';
         document.getElementById('shop-qr-img').src = qrUrl;
-        document.getElementById('pay-amount-text').textContent = total;
-        const box = document.getElementById('pay-box');
-        box.classList.add('show');
-        box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        const panel = document.getElementById('pay-panel');
+        panel.classList.add('show');
+        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
         showToast('💳 Thông tin thanh toán đã sẵn sàng!');
+    }
+
+    function shopCopy(txt) {
+        navigator.clipboard.writeText(txt).then(() => showToast('📋 Đã sao chép: ' + txt));
     }
 
     calcShop();
