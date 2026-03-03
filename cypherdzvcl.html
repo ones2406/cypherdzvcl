@@ -8,7 +8,6 @@
     <link rel="shortcut icon" href="https://scontent.fhan18-1.fna.fbcdn.net/v/t39.30808-6/557481975_122187746096569142_6613018808623610406_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=833d8c&_nc_ohc=pd93vMoULecQ7kNvwFdY8hT&_nc_oc=AdlmlfmUx7ViYSuDyxfqFGQUUUyJovbCmUNXXF2LR0QjQjQhUKTA2PxEmvE5uQrrytJtw&_nc_zt=23&_nc_ht=scontent.fhan18-1.fna&_nc_gid=XvYrDtqwNKIW7GSz0d8aCQ&oh=00_AffwcSnQZPTnX1284lJjcB2vJ6xZVeQhUXzZrBOpZ4pxXw&oe=6906B1FF">
 
     <style>
-        /* ===== CSS Variables ===== */
         :root{
             --glass-bg: rgba(255,255,255,0.04);
             --card-bg: rgba(8,10,14,0.75);
@@ -21,7 +20,6 @@
             --neon-strong: rgba(0,196,255,0.45);
         }
 
-        /* ===== Base ===== */
         *{box-sizing:border-box;margin:0;padding:0}
         html,body{height:100%}
         body{
@@ -35,7 +33,6 @@
         @keyframes rgbFlow{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
         .dark-overlay{position:fixed;inset:0;z-index:0;background:linear-gradient(180deg,rgba(0,0,0,0.55),rgba(2,6,12,0.8));pointer-events:none;}
 
-        /* ===== NAV TABS ===== */
         .tab-nav {
             position: sticky; top: 0; z-index: 1000;
             background: rgba(5, 8, 18, 0.88);
@@ -63,12 +60,10 @@
         .tab-btn.active::after { left: 0; right: 0; }
         .tab-btn:hover:not(.active) { color: var(--text); }
 
-        /* ===== SECTIONS ===== */
         .section { display: none; position: relative; z-index: 2; }
         .section.active { display: block; animation: fadeUp 0.35s ease; }
         @keyframes fadeUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
 
-        /* ===== PROFILE (original styles) ===== */
         .wrap{position:relative;z-index:2;max-width:1000px;margin:36px auto;padding:24px}
         header{display:flex;gap:20px;align-items:center;background:rgba(255,255,255,0.03);border-radius:14px;padding:28px;box-shadow:0 8px 36px rgba(2,6,12,0.7);backdrop-filter:blur(10px)}
         .avatar{width:110px;height:110px;border-radius:50%;flex:0 0 110px;background-size:cover;background-position:center;box-shadow:0 0 25px rgba(0,196,255,0.3)}
@@ -84,8 +79,18 @@
         .panel{background:rgba(255,255,255,0.03);border-radius:12px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px}
         .panel h3{color:var(--accent)}
         .qr{width:190px;height:190px;border-radius:12px;border:3px solid rgba(255,255,255,0.05);box-shadow:0 0 40px rgba(0,196,255,0.25)}
-        .qr-wrap{position:relative}
-        .qr-wrap::after{content:"";position:absolute;inset:-12px;border-radius:16px;background:conic-gradient(from 0deg,rgba(0,196,255,0.4),rgba(124,77,255,0.35));filter:blur(16px);animation:spin 8s linear infinite}
+        /* FIX: qr-wrap animation sử dụng pseudo-element đúng cách */
+        .qr-wrap{position:relative;width:190px;height:190px;}
+        .qr-wrap .qr{position:relative;z-index:1;}
+        .qr-glow{
+            position:absolute;
+            inset:-12px;
+            border-radius:16px;
+            background: conic-gradient(rgba(0,196,255,0.5) 0deg, rgba(124,77,255,0.45) 120deg, rgba(0,255,170,0.4) 240deg, rgba(0,196,255,0.5) 360deg);
+            filter:blur(14px);
+            animation:spin 8s linear infinite;
+            z-index:0;
+        }
         @keyframes spin{to{transform:rotate(360deg)}}
         .bank-info{width:100%;margin-top:8px}
         .bank-row{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;margin:6px 0;background:rgba(255,255,255,0.02);cursor:pointer;transition:.2s}
@@ -105,7 +110,6 @@
         .title{font-weight:700;color:var(--text)}
         .desc{color:var(--muted);font-size:0.85rem}
 
-        /* Comments */
         .comment-area{width:100%; margin-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); padding-top: 20px;}
         .comment-area p{color:var(--muted); font-size: 0.85rem; margin-bottom: 10px;}
         .comment-input-group{display: flex; gap: 8px; margin-bottom: 15px;}
@@ -130,18 +134,16 @@
         .comment-text{color:var(--text); flex-grow: 1;}
         .comment-time{color:var(--muted);display:block;text-align:right; font-size: 0.75rem;}
 
-        /* Toast */
         .toast{position:fixed;right:20px;bottom:80px;padding:12px 16px;border-radius:10px;background:var(--toast-bg);color:var(--text);box-shadow:0 8px 30px rgba(0,0,0,0.6);display:none;font-weight:700;z-index: 10000;}
         .toast.show{display:flex;animation:fade .3s ease both}
         @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-        /* ===== ATM / QR GENERATOR ===== */
+        /* ATM */
         .atm-wrap { max-width: 480px; margin: 0 auto; padding: 36px 20px; }
         .atm-title { font-size: 1.6rem; font-weight: 700; color: var(--accent); text-align: center; margin-bottom: 6px; }
         .atm-sub { text-align: center; color: var(--muted); font-size: 0.88rem; margin-bottom: 28px; }
         .atm-card { background: var(--card-bg); border-radius: 14px; padding: 22px; margin-bottom: 16px; box-shadow: 0 6px 30px rgba(2,6,12,0.6); }
         .atm-label { font-size: 0.78rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: block; }
-        /* Bank selector — pill cards */
         .bank-pills { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .bank-pill {
             background: rgba(255,255,255,0.03); border: 2px solid rgba(255,255,255,0.07);
@@ -156,7 +158,6 @@
         }
         .bank-pill.active .bp-acc { opacity: 1; color: var(--accent); }
         .bank-sel-label { font-size: 0.82rem; color: var(--success); margin-top: 10px; font-weight: 600; }
-        /* Inputs */
         .atm-input {
             width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08);
             border-radius: 10px; padding: 12px 14px; color: var(--text); font-family: 'Poppins', sans-serif;
@@ -164,7 +165,6 @@
         }
         .atm-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,196,255,0.1); }
         .amount-hint { font-size: 0.82rem; color: var(--accent); margin-top: 6px; font-weight: 600; }
-        /* Buttons */
         .atm-btn {
             width: 100%; padding: 13px; border: none; border-radius: 10px;
             background: linear-gradient(90deg, var(--accent), var(--accent-2));
@@ -180,7 +180,6 @@
             cursor: pointer; transition: .25s; margin-top: 10px; display: none;
         }
         .atm-btn-dl:hover { filter: brightness(1.1); transform: translateY(-2px); }
-        /* QR canvas result */
         .qr-canvas-wrap {
             display: none; text-align: center; margin-top: 22px;
             animation: fadeUp .35s ease;
@@ -195,15 +194,12 @@
         .receiver-note { margin-top: 12px; color: var(--muted); font-size: 0.85rem; }
         .receiver-note strong { color: var(--accent); }
 
-        /* ===== BUILDSHOP ===== */
+        /* BUILDSHOP */
         .shop-wrap { max-width: 960px; margin: 0 auto; padding: 36px 20px 60px; }
         .shop-title { font-size: 1.6rem; font-weight: 700; color: var(--accent); text-align: center; margin-bottom: 6px; }
         .shop-sub { text-align: center; color: var(--muted); font-size: 0.88rem; margin-bottom: 32px; }
-
-        /* 2-column layout on desktop */
         .shop-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media(max-width:760px){ .shop-cols { grid-template-columns: 1fr; } }
-
         .shop-card { background: var(--card-bg); border-radius: 14px; padding: 22px; margin-bottom: 16px; box-shadow: 0 6px 30px rgba(2,6,12,0.6); }
         .shop-card h3 {
             color: var(--accent); font-size: 0.78rem; font-weight: 700;
@@ -216,8 +212,6 @@
             color: #041225; font-size: 0.7rem; font-weight: 900;
             display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
         }
-
-        /* Domain extension grid */
         .ext-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; }
         .ext-opt {
             background: rgba(255,255,255,0.02); border: 2px solid rgba(255,255,255,0.07);
@@ -229,8 +223,6 @@
         .ext-opt.active { border-color: var(--accent-2); background: rgba(124,77,255,0.1); box-shadow: 0 0 16px rgba(124,77,255,0.2); }
         .ext-opt.active .eo-name { color: var(--accent-2); }
         .ext-opt.active .eo-price { color: rgba(124,77,255,0.8); }
-
-        /* Hosting pills */
         .host-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 8px; }
         .host-opt {
             background: rgba(255,255,255,0.02); border: 2px solid rgba(255,255,255,0.07);
@@ -242,8 +234,6 @@
         .host-opt.active { border-color: var(--success); background: rgba(75,226,122,0.07); box-shadow: 0 0 14px rgba(75,226,122,0.15); }
         .host-opt.active .ho-name { color: var(--success); }
         .host-opt.active .ho-price { color: rgba(75,226,122,0.7); }
-
-        /* Inputs */
         .shop-input {
             width: 100%; background: rgba(0,0,0,0.4); border: 1px solid rgba(255,255,255,0.08);
             border-radius: 10px; padding: 12px 14px; color: var(--text); font-family: 'Poppins', sans-serif;
@@ -251,8 +241,6 @@
         }
         .shop-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(0,196,255,0.1); }
         .shop-input-hint { font-size: 0.78rem; color: var(--muted); margin-top: 5px; }
-
-        /* Domain preview badge */
         .domain-preview {
             display: inline-block; margin-top: 8px;
             background: rgba(0,196,255,0.08); border: 1px solid rgba(0,196,255,0.2);
@@ -261,7 +249,41 @@
             min-height: 30px; word-break: break-all;
         }
 
-        /* Addon toggle row */
+        /* Domain check status */
+        .domain-check-row {
+            display: flex; align-items: center; gap: 8px; margin-top: 10px;
+        }
+        .domain-check-btn {
+            padding: 8px 16px; border: none; border-radius: 8px;
+            background: linear-gradient(90deg, var(--accent), var(--accent-2));
+            color: #041225; font-family: 'Poppins', sans-serif;
+            font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: .2s; white-space: nowrap;
+        }
+        .domain-check-btn:hover { filter: brightness(1.1); }
+        .domain-check-btn:disabled { opacity: .5; cursor: not-allowed; }
+        .domain-status {
+            display: none; margin-top: 10px;
+            padding: 10px 14px; border-radius: 10px;
+            font-size: 0.88rem; font-weight: 600;
+            animation: fadeUp .3s ease;
+        }
+        .domain-status.available {
+            background: rgba(75,226,122,0.1);
+            border: 1px solid rgba(75,226,122,0.35);
+            color: var(--success);
+        }
+        .domain-status.taken {
+            background: rgba(255,80,80,0.1);
+            border: 1px solid rgba(255,80,80,0.35);
+            color: #ff6b6b;
+        }
+        .domain-status.checking {
+            background: rgba(0,196,255,0.07);
+            border: 1px solid rgba(0,196,255,0.2);
+            color: var(--accent);
+        }
+        .domain-status.show { display: block; }
+
         .cb-row {
             display: flex; align-items: flex-start; gap: 12px;
             background: rgba(255,255,255,0.02); border: 2px solid rgba(255,255,255,0.07);
@@ -273,8 +295,6 @@
         .cb-row label { cursor: pointer; font-size: 0.9rem; font-weight: 600; color: var(--text); flex: 1; }
         .cb-row .cb-price { color: var(--accent); font-weight: 700; }
         .cb-row .cb-desc { display: block; font-size: 0.78rem; color: var(--muted); font-weight: 400; margin-top: 2px; }
-
-        /* Design fee fixed badge */
         .fee-badge {
             display: flex; align-items: center; justify-content: space-between;
             background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.07);
@@ -282,8 +302,6 @@
         }
         .fee-badge .fb-label { font-size: 0.88rem; color: var(--muted); }
         .fee-badge .fb-value { font-size: 1rem; font-weight: 700; color: var(--text); }
-
-        /* Right column — summary + payment */
         .summary-box { background: rgba(0,0,0,0.35); border-radius: 12px; padding: 16px; }
         .sum-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.88rem; }
         .sum-row:last-child { border-bottom: none; }
@@ -292,7 +310,6 @@
         .sum-row.total-row { margin-top: 4px; }
         .sum-row.total-row .sl { color: var(--accent); font-weight: 700; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.08em; }
         .sum-row.total-row .sv { color: var(--accent); font-size: 1.15rem; }
-
         .shop-btn {
             width: 100%; padding: 14px; border: none; border-radius: 10px;
             background: linear-gradient(90deg, var(--accent), var(--accent-2));
@@ -303,9 +320,8 @@
         .shop-btn:active { transform: translateY(0); }
         .shop-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 
-        /* Payment info panel */
-        .pay-panel { display: none; margin-top: 16px; animation: fadeUp .35s ease; }
-        .pay-panel.show { display: block; }
+        /* FIX: pay-panel always visible (no need to show/hide) */
+        .pay-panel { margin-top: 16px; }
         .pay-bank-rows { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 2px 0; margin-bottom: 12px; }
         .pay-bank-row {
             display: flex; justify-content: space-between; align-items: center;
@@ -323,22 +339,39 @@
         }
         .pay-total-badge .ptb-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
         .pay-total-badge .ptb-val { font-size: 1.3rem; font-weight: 700; color: var(--accent); margin-top: 2px; }
-        .pay-qr-wrap { text-align: center; margin: 12px 0; position: relative; }
-        .pay-qr-wrap::before {
-            content: ''; position: absolute; inset: -8px; border-radius: 20px;
-            background: conic-gradient(from 0deg, rgba(0,196,255,0.3), rgba(124,77,255,0.3));
-            filter: blur(12px); animation: spin 8s linear infinite; z-index: 0;
-        }
-        .pay-qr-wrap img { position: relative; z-index: 1; width: 180px; border-radius: 12px; border: 2px solid rgba(255,255,255,0.1); }
-        .pay-hint { font-size: 0.8rem; color: var(--muted); text-align: center; line-height: 1.6; margin-bottom: 10px; }
 
+        /* FIX: QR glow animation sử dụng div riêng thay vì pseudo-element */
+        .pay-qr-wrap {
+            text-align: center; margin: 12px 0;
+            position: relative; display: flex; justify-content: center;
+        }
+        .pay-qr-inner {
+            position: relative; display: inline-block;
+        }
+        .pay-qr-glow {
+            position: absolute;
+            inset: -8px;
+            border-radius: 20px;
+            background: conic-gradient(rgba(0,196,255,0.4) 0deg, rgba(124,77,255,0.35) 120deg, rgba(0,255,170,0.35) 240deg, rgba(0,196,255,0.4) 360deg);
+            filter: blur(12px);
+            animation: spin 8s linear infinite;
+            z-index: 0;
+        }
+        .pay-qr-wrap img {
+            position: relative; z-index: 1;
+            width: 180px; border-radius: 12px;
+            border: 2px solid rgba(255,255,255,0.1);
+            display: block;
+        }
+
+        .pay-hint { font-size: 0.8rem; color: var(--muted); text-align: center; line-height: 1.6; margin-bottom: 10px; }
         .demo-link { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.1); color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.88rem; transition: .2s; margin-bottom: 12px; }
         .demo-link:hover { border-color: var(--accent); color: var(--accent); }
         .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
         .feat-item { display: flex; align-items: center; gap: 7px; font-size: 0.82rem; color: var(--muted); }
         .feat-item::before { content: '✓'; color: var(--success); font-weight: 900; flex-shrink: 0; }
 
-        /* ===== Chatbot ===== */
+        /* Chatbot */
         #cypher-toggle { position: fixed; bottom: 24px; right: 24px; width:56px; height:56px; border-radius:50%; background: linear-gradient(135deg,#00c6ff,#0072ff); color:#fff; border:none; z-index:10050; cursor:pointer; box-shadow:0 8px 30px rgba(0,0,0,0.35); display:flex; align-items:center; justify-content:center; font-size:22px; transition: transform 0.3s ease; }
         #cypher-toggle:hover { transform: scale(1.05); }
         #cypher-panel { position: fixed; bottom: 96px; right: 24px; width:360px; max-height:520px; background:#0b1220; border-radius:14px; box-shadow:0 12px 40px rgba(0,0,0,0.6); display:none; flex-direction:column; overflow:hidden; z-index:10040; border:1px solid rgba(0,198,255,0.12); }
@@ -353,7 +386,6 @@
         #cypher-input button:hover { background: #4ccfff; }
         .clearfix::after { content:""; display:block; clear:both; }
 
-        /* Footer */
         footer{margin-top:26px;text-align:center;color:var(--muted);font-size:0.9rem;padding-bottom:80px}
         @media(max-width:980px){.grid{grid-template-columns:1fr}.panel{order:-1}.web-card{flex:0 0 100%}}
         @media(max-width:520px){.ext-grid{grid-template-columns:repeat(2,1fr)}.bank-pills{grid-template-columns:1fr 1fr}}
@@ -364,29 +396,25 @@
 <div class="rgb-layer"></div>
 <div class="dark-overlay"></div>
 
-<!-- ===== NAVIGATION TABS ===== -->
 <nav class="tab-nav">
     <button class="tab-btn active" onclick="showTab('profile',this)">👤 Hồ Sơ</button>
     <button class="tab-btn" onclick="showTab('atm',this)">💳 Tạo QR</button>
     <button class="tab-btn" onclick="showTab('shop',this)">🌐 Báo Giá Web</button>
 </nav>
 
-<!-- ============================== -->
-<!--        PROFILE SECTION         -->
-<!-- ============================== -->
+<!-- PROFILE SECTION -->
 <div id="profile" class="section active">
     <div class="wrap">
-
         <header>
             <div class="avatar" style="background-image:url('https://sf-static.upanhlaylink.com/img/image_20260123d980ed2007353608bcd74ca68d383677.jpg');"></div>
             <div class="meta">
                 <h1>Lê Văn Linh (Cypher)</h1>
                 <p>Admin website <a href="https://cypher234.shop" target="_blank" style="color:var(--accent);text-decoration:underline">Cypher234.shop</a></p>
+                <p>Admin website <a href="https://random36.shop" target="_blank" style="color:var(--accent);text-decoration:underline">Random36.shop</a></p>
             </div>
         </header>
 
         <div class="grid">
-
             <div class="card">
                 <h2>Giới thiệu bản thân</h2>
                 <p class="lead">Xin chào! Tôi là <strong>Lê Văn Linh(Cypher)</strong>, chuyên cung cấp các dịch vụ game và thiết kế web. Uy tín, an toàn và chất lượng là ưu tiên hàng đầu. Chúng tôi cam kết chất lượng dịch vụ được ưu tiên hàng đầu sẽ làm cho quý khách hài lòng tuyệt đối. Welcome To Cypher</p>
@@ -402,7 +430,10 @@
 
                 <h2 style="margin-top:18px">Thanh toán nhanh (Quét QR)</h2>
                 <div class="panel">
-                    <div class="qr-wrap"><img class="qr" src="https://img.vietqr.io/image/970407-19073015796012-compact.png?addInfo=LE%20VAN%20LINH" alt="QR Techcombank"></div>
+                    <div class="qr-wrap">
+                        <div class="qr-glow"></div>
+                        <img class="qr" src="https://img.vietqr.io/image/970407-19073015796012-compact.png?addInfo=LE%20VAN%20LINH" alt="QR Techcombank">
+                    </div>
 
                     <div class="bank-info">
                         <div class="bank-row copy-target" data-copy-text="Techcombank"><div class="label">Ngân hàng</div><div class="value">Techcombank</div></div>
@@ -427,10 +458,13 @@
                         <img src="https://sf-static.upanhlaylink.com/img/image_20251124b381eb772af6c8b58d9718840b1773b8.jpg" alt="">
                         <div><div class="title">Cypher234.shop</div><div class="desc">Random 9 cá 100% ra 3s</div></div>
                     </a>
-                    <!-- Link to buildshop tab inside this page -->
+                    <a class="web-card" href="https://random36.shop" target="_blank">
+                        <img src="https://sf-static.upanhlaylink.com/img/image_20251124b381eb772af6c8b58d9718840b1773b8.jpg" alt="">
+                        <div><div class="title">Random36.shop</div><div class="desc">Random 8 cá 100% ra 3s</div></div>
+                    </a>
                     <div class="web-card" onclick="showTab('shop', document.querySelectorAll('.tab-btn')[2]); window.scrollTo({top:0,behavior:'smooth'});" style="cursor:pointer;">
                         <img src="https://sf-static.upanhlaylink.com/img/image_20251124b381eb772af6c8b58d9718840b1773b8.jpg" alt="">
-                        <div><div class="title">Tạo shop</div><div class="desc">Báo giá website siêu rẻ</div></div>
+                        <div><div class="title">Cypherdevgithub</div><div class="desc">Báo giá website siêu rẻ</div></div>
                     </div>
                 </div>
 
@@ -445,7 +479,6 @@
                             <input type="text" id="commentInput" placeholder="Vui lòng đăng nhập..." disabled>
                             <button id="sendComment" disabled>Gửi</button>
                         </div>
-
                         <h4 class="comment-list-title">Danh sách bình luận:</h4>
                         <ul id="commentList" style="list-style-type: none; padding: 0;"></ul>
                     </div>
@@ -457,15 +490,12 @@
     </div>
 </div>
 
-<!-- ============================== -->
-<!--       ATM / QR SECTION         -->
-<!-- ============================== -->
+<!-- ATM / QR SECTION -->
 <div id="atm" class="section">
     <div class="atm-wrap">
         <h2 class="atm-title">Tạo QR Chuyển Khoản</h2>
         <p class="atm-sub">Tạo mã QR thanh toán tức thì — tải về máy dễ dàng</p>
 
-        <!-- Bank picker -->
         <div class="atm-card">
             <span class="atm-label">Chọn ngân hàng</span>
             <div class="bank-pills">
@@ -481,24 +511,20 @@
             <p class="bank-sel-label" id="atm-bank-label">✅ Đang chọn: Techcombank — TK: 19073015796012</p>
         </div>
 
-        <!-- Amount -->
         <div class="atm-card">
             <span class="atm-label">Số tiền (VND)</span>
             <input class="atm-input" type="number" id="atm-amount" placeholder="Ví dụ: 50000" oninput="updateAtmAmount()">
             <p class="amount-hint" id="atm-amount-hint">Đang nhập: 0 VND</p>
         </div>
 
-        <!-- Content -->
         <div class="atm-card">
             <span class="atm-label">Nội dung chuyển khoản</span>
             <input class="atm-input" type="text" id="atm-content" value="LE VAN LINH DZ" placeholder="Nội dung...">
         </div>
 
-        <!-- Buttons -->
         <button class="atm-btn" onclick="createAtmQR()">⚡ Tạo QR</button>
         <button class="atm-btn-dl" id="atm-dl-btn" onclick="downloadAtmQR()">⬇ Tải QR về máy</button>
 
-        <!-- Canvas result -->
         <div class="qr-canvas-wrap" id="atm-canvas-wrap">
             <canvas id="qrCanvas"></canvas>
             <p class="receiver-note">Người nhận: <strong>Lê Văn Linh</strong></p>
@@ -506,9 +532,7 @@
     </div>
 </div>
 
-<!-- ============================== -->
-<!--       BUILDSHOP SECTION        -->
-<!-- ============================== -->
+<!-- BUILDSHOP SECTION -->
 <div id="shop" class="section">
     <div class="shop-wrap">
         <h2 class="shop-title">BÁO GIÁ WEBSITE</h2>
@@ -516,7 +540,7 @@
 
         <div class="shop-cols">
 
-            <!-- ===== LEFT COLUMN — Form ===== -->
+            <!-- LEFT COLUMN -->
             <div>
 
                 <!-- Domain name -->
@@ -527,6 +551,11 @@
                         oninput="updateDomainPreview()">
                     <p class="shop-input-hint">Chỉ nhập phần tên, chưa cần đuôi miền.</p>
                     <div class="domain-preview" id="domain-preview">—</div>
+                    <!-- Domain check row -->
+                    <div class="domain-check-row" style="margin-top:10px;">
+                        <button class="domain-check-btn" id="domain-check-btn" onclick="checkDomain()" disabled>🔍 Kiểm tra tên miền</button>
+                    </div>
+                    <div class="domain-status" id="domain-status"></div>
                 </div>
 
                 <!-- Domain extension -->
@@ -580,7 +609,7 @@
                     </div>
                 </div>
 
-                <!-- Design fee (fixed) -->
+                <!-- Design fee -->
                 <div class="shop-card">
                     <h3><span class="step-num">5</span> Tiền công thiết kế</h3>
                     <div class="fee-badge">
@@ -592,7 +621,7 @@
 
             </div>
 
-            <!-- ===== RIGHT COLUMN — Summary + Payment ===== -->
+            <!-- RIGHT COLUMN — Summary + Payment (always visible) -->
             <div>
 
                 <!-- Summary -->
@@ -611,14 +640,14 @@
                     <button class="shop-btn" id="shop-pay-btn" onclick="shopPay()">💳 Tính & Thanh Toán</button>
                 </div>
 
-                <!-- Payment panel -->
+                <!-- Payment panel — ALWAYS VISIBLE -->
                 <div class="pay-panel" id="pay-panel">
                     <div class="shop-card">
                         <h3>💳 Thông tin thanh toán</h3>
 
                         <div class="pay-total-badge">
                             <div class="ptb-label">Số tiền cần chuyển</div>
-                            <div class="ptb-val" id="pay-total-text">—</div>
+                            <div class="ptb-val" id="pay-total-text">383.000đ</div>
                         </div>
 
                         <p class="pay-hint">
@@ -641,12 +670,19 @@
                             </div>
                         </div>
 
+                        <!-- FIX: QR glow với div riêng, không dùng ::before pseudo-element -->
                         <div class="pay-qr-wrap">
-                            <img id="shop-qr-img" src="" alt="QR Thanh Toán">
+                            <div class="pay-qr-inner">
+                                <div class="pay-qr-glow"></div>
+                                <img id="shop-qr-img" src="https://img.vietqr.io/image/TCB-19073015796012-compact2.png?amount=383000&addInfo=ThanhToanWeb&accountName=Le%20Van%20Linh" alt="QR Thanh Toán">
+                            </div>
                         </div>
 
                         <a class="demo-link" href="https://cypher234.shop" target="_blank">
                             🌐 Xem Demo: Cypher234.shop
+                        </a>
+                        <a class="demo-link" href="https://random36.shop" target="_blank">
+                            🌐 Xem Demo: Random36.shop
                         </a>
 
                         <div class="shop-card" style="background:rgba(0,0,0,0.2);padding:14px;margin:0;">
@@ -665,14 +701,12 @@
                 </div>
 
             </div>
-        </div><!-- end shop-cols -->
+        </div>
     </div>
 </div>
 
-<!-- Toast -->
 <div id="toast" class="toast"></div>
 
-<!-- Chatbot toggle -->
 <button id="cypher-toggle" aria-label="Open chat">💬</button>
 <div id="cypher-panel" role="dialog" aria-label="Cypher AI Chat">
     <div id="cypher-header">🤖 Cypher AI — Hỗ trợ</div>
@@ -683,7 +717,6 @@
     </div>
 </div>
 
-<!-- ===== SCRIPTS ===== -->
 <script>
     /* ---- Tab switching ---- */
     function showTab(id, btn) {
@@ -725,7 +758,6 @@
         const names = { 'TCB': 'Techcombank', 'MB': 'MBBank' };
         document.getElementById('atm-bank-label').textContent =
             '✅ Đang chọn: ' + names[atmBankId] + ' — TK: ' + atmBankAcc;
-        // reset canvas if already shown
         const wrap = document.getElementById('atm-canvas-wrap');
         wrap.classList.remove('show');
         document.getElementById('atm-dl-btn').style.display = 'none';
@@ -791,6 +823,12 @@
         const name = document.getElementById('shop-domain').value.trim();
         document.getElementById('domain-preview').textContent =
             name ? name + shopExtName : '—';
+        // Enable/disable check button
+        document.getElementById('domain-check-btn').disabled = !name;
+        // Reset domain status when name changes
+        const statusEl = document.getElementById('domain-status');
+        statusEl.className = 'domain-status';
+        statusEl.textContent = '';
         calcShop();
     }
 
@@ -800,6 +838,10 @@
         shopExtPrice = parseInt(el.dataset.price);
         shopExtName  = el.dataset.ext;
         updateDomainPreview();
+        // Reset domain status when extension changes
+        const statusEl = document.getElementById('domain-status');
+        statusEl.className = 'domain-status';
+        statusEl.textContent = '';
     }
 
     function selectHost(el) {
@@ -840,9 +882,8 @@
         document.getElementById('pay-total-text').textContent = total.toLocaleString('vi-VN') + 'đ';
         document.getElementById('shop-qr-img').src = qrUrl;
 
-        const panel = document.getElementById('pay-panel');
-        panel.classList.add('show');
-        panel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Scroll to payment info
+        document.getElementById('pay-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
         showToast('💳 Thông tin thanh toán đã sẵn sàng!');
     }
 
@@ -850,10 +891,72 @@
         navigator.clipboard.writeText(txt).then(() => showToast('📋 Đã sao chép: ' + txt));
     }
 
+    /* ========== DOMAIN CHECK ========== */
+    async function checkDomain() {
+        const name = document.getElementById('shop-domain').value.trim();
+        if (!name) return;
+
+        const fullDomain = name + shopExtName;
+        const statusEl = document.getElementById('domain-status');
+        const btn = document.getElementById('domain-check-btn');
+
+        // Show checking state
+        statusEl.className = 'domain-status checking show';
+        statusEl.textContent = '⏳ Đang kiểm tra ' + fullDomain + ' ...';
+        btn.disabled = true;
+
+        try {
+            // Use rdap.org public API (no CORS issues)
+            const resp = await fetch(
+                'https://rdap.org/domain/' + encodeURIComponent(fullDomain),
+                { method: 'GET', signal: AbortSignal.timeout(8000) }
+            );
+
+            if (resp.status === 404) {
+                // 404 = domain not found = available
+                statusEl.className = 'domain-status available show';
+                statusEl.innerHTML = '✅ <strong>' + fullDomain + '</strong> có thể đăng ký! Tên miền này chưa được sử dụng.';
+            } else if (resp.ok) {
+                // 200 = domain exists = taken
+                statusEl.className = 'domain-status taken show';
+                statusEl.innerHTML = '❌ <strong>' + fullDomain + '</strong> đã được mua. Hãy chọn tên miền khác!';
+            } else {
+                throw new Error('status ' + resp.status);
+            }
+        } catch (err) {
+            if (err.name === 'AbortError' || err.name === 'TimeoutError') {
+                statusEl.className = 'domain-status taken show';
+                statusEl.innerHTML = '⚠️ Không thể kiểm tra tên miền. Vui lòng thử lại sau.';
+            } else {
+                // Fallback: try DoH (DNS over HTTPS) check
+                try {
+                    const doh = await fetch(
+                        'https://cloudflare-dns.com/dns-query?name=' + encodeURIComponent(fullDomain) + '&type=A',
+                        { headers: { 'Accept': 'application/dns-json' }, signal: AbortSignal.timeout(6000) }
+                    );
+                    const data = await doh.json();
+                    // If NXDOMAIN (Status 3) = not registered
+                    if (data.Status === 3) {
+                        statusEl.className = 'domain-status available show';
+                        statusEl.innerHTML = '✅ <strong>' + fullDomain + '</strong> có thể đăng ký! Tên miền này chưa được sử dụng.';
+                    } else {
+                        statusEl.className = 'domain-status taken show';
+                        statusEl.innerHTML = '❌ <strong>' + fullDomain + '</strong> đã được mua. Hãy chọn tên miền khác!';
+                    }
+                } catch(e2) {
+                    statusEl.className = 'domain-status taken show';
+                    statusEl.innerHTML = '⚠️ Không kiểm tra được. Vui lòng thử tại <a href="https://www.whois.com/whois/' + fullDomain + '" target="_blank" style="color:var(--accent)">whois.com</a>';
+                }
+            }
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
     calcShop();
 </script>
 
-<!-- Firebase + Comments (original code) -->
+<!-- Firebase + Comments -->
 <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import {
@@ -1002,7 +1105,7 @@
     loadComments();
 </script>
 
-<!-- Chatbot (original code) -->
+<!-- Chatbot -->
 <script>
 (function(){
     const PROXY_URL = "https://cypher234.shop/public/proxy.php";
