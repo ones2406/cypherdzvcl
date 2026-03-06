@@ -79,7 +79,6 @@
         .panel{background:rgba(255,255,255,0.03);border-radius:12px;padding:18px;display:flex;flex-direction:column;align-items:center;gap:12px}
         .panel h3{color:var(--accent)}
         .qr{width:190px;height:190px;border-radius:12px;border:3px solid rgba(255,255,255,0.05);box-shadow:0 0 40px rgba(0,196,255,0.25)}
-        /* FIX: qr-wrap animation sử dụng pseudo-element đúng cách */
         .qr-wrap{position:relative;width:190px;height:190px;}
         .qr-wrap .qr{position:relative;z-index:1;}
         .qr-glow{
@@ -180,6 +179,17 @@
             cursor: pointer; transition: .25s; margin-top: 10px; display: none;
         }
         .atm-btn-dl:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+        /* Payment proof upload button */
+        .atm-btn-proof {
+            width: 100%; padding: 12px; border: none; border-radius: 10px;
+            background: linear-gradient(90deg, #ff8c00, #ff4757);
+            color: #fff;
+            font-family: 'Poppins', sans-serif; font-size: 0.92rem; font-weight: 700;
+            cursor: pointer; transition: .25s; margin-top: 10px; display: none;
+        }
+        .atm-btn-proof:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
         .qr-canvas-wrap {
             display: none; text-align: center; margin-top: 22px;
             animation: fadeUp .35s ease;
@@ -248,8 +258,6 @@
             font-size: 0.85rem; font-weight: 700; color: var(--accent);
             min-height: 30px; word-break: break-all;
         }
-
-        /* Domain check status */
         .domain-check-row {
             display: flex; align-items: center; gap: 8px; margin-top: 10px;
         }
@@ -320,7 +328,6 @@
         .shop-btn:active { transform: translateY(0); }
         .shop-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
 
-        /* FIX: pay-panel always visible (no need to show/hide) */
         .pay-panel { margin-top: 16px; }
         .pay-bank-rows { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 2px 0; margin-bottom: 12px; }
         .pay-bank-row {
@@ -340,7 +347,6 @@
         .pay-total-badge .ptb-label { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.1em; }
         .pay-total-badge .ptb-val { font-size: 1.3rem; font-weight: 700; color: var(--accent); margin-top: 2px; }
 
-        /* FIX: QR glow animation sử dụng div riêng thay vì pseudo-element */
         .pay-qr-wrap {
             text-align: center; margin: 12px 0;
             position: relative; display: flex; justify-content: center;
@@ -363,13 +369,123 @@
             border: 2px solid rgba(255,255,255,0.1);
             display: block;
         }
-
         .pay-hint { font-size: 0.8rem; color: var(--muted); text-align: center; line-height: 1.6; margin-bottom: 10px; }
         .demo-link { display: flex; align-items: center; justify-content: center; gap: 6px; padding: 10px; border-radius: 9px; border: 1px solid rgba(255,255,255,0.1); color: var(--text); text-decoration: none; font-weight: 600; font-size: 0.88rem; transition: .2s; margin-bottom: 12px; }
         .demo-link:hover { border-color: var(--accent); color: var(--accent); }
         .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
         .feat-item { display: flex; align-items: center; gap: 7px; font-size: 0.82rem; color: var(--muted); }
         .feat-item::before { content: '✓'; color: var(--success); font-weight: 900; flex-shrink: 0; }
+
+        /* ===== PAYMENT TYPE SELECTOR ===== */
+        .pay-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .pay-type-opt {
+            background: rgba(255,255,255,0.02); border: 2px solid rgba(255,255,255,0.07);
+            border-radius: 12px; padding: 16px 10px; text-align: center; cursor: pointer;
+            transition: .2s; user-select: none;
+        }
+        .pay-type-opt .pto-icon { font-size: 1.6rem; margin-bottom: 6px; }
+        .pay-type-opt .pto-name { font-size: 0.92rem; font-weight: 700; color: var(--text); }
+        .pay-type-opt .pto-desc { font-size: 0.72rem; color: var(--muted); margin-top: 3px; }
+        .pay-type-opt.active { border-color: var(--accent); background: rgba(0,196,255,0.08); box-shadow: 0 0 16px rgba(0,196,255,0.18); }
+        .pay-type-opt.active .pto-name { color: var(--accent); }
+
+        /* Installment options */
+        .installment-box {
+            display: none; margin-top: 14px;
+            background: rgba(0,0,0,0.25); border-radius: 12px; padding: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
+            animation: fadeUp .3s ease;
+        }
+        .installment-box.show { display: block; }
+        .inst-label { font-size: 0.78rem; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 10px; display: block; }
+        .inst-type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
+        .inst-type-opt {
+            background: rgba(255,255,255,0.02); border: 2px solid rgba(255,255,255,0.07);
+            border-radius: 10px; padding: 10px 8px; text-align: center; cursor: pointer; transition: .2s;
+        }
+        .inst-type-opt .ito-name { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+        .inst-type-opt .ito-max { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+        .inst-type-opt.active { border-color: #ff8c00; background: rgba(255,140,0,0.08); }
+        .inst-type-opt.active .ito-name { color: #ff8c00; }
+        .inst-period-grid { display: grid; gap: 8px; margin-bottom: 14px; }
+        .inst-period-opt {
+            background: rgba(255,255,255,0.02); border: 2px solid rgba(255,255,255,0.07);
+            border-radius: 10px; padding: 10px 14px; cursor: pointer; transition: .2s;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .inst-period-opt .ipo-label { font-size: 0.88rem; font-weight: 600; color: var(--text); }
+        .inst-period-opt .ipo-amount { font-size: 0.82rem; font-weight: 700; color: var(--muted); }
+        .inst-period-opt.active { border-color: #ff8c00; background: rgba(255,140,0,0.08); }
+        .inst-period-opt.active .ipo-label { color: #ff8c00; }
+        .inst-period-opt.active .ipo-amount { color: rgba(255,140,0,0.8); }
+        .deposit-row { margin-top: 10px; }
+        .deposit-hint { font-size: 0.75rem; color: var(--muted); margin-top: 6px; }
+        .deposit-hint.warn { color: #ff6b6b; }
+        .deposit-hint.ok { color: var(--success); }
+
+        /* Proof upload */
+        .proof-upload-area {
+            border: 2px dashed rgba(255,255,255,0.1); border-radius: 12px;
+            padding: 24px; text-align: center; cursor: pointer; transition: .2s;
+            background: rgba(0,0,0,0.2); position: relative; overflow: hidden;
+        }
+        .proof-upload-area:hover { border-color: var(--accent); background: rgba(0,196,255,0.05); }
+        .proof-upload-area.dragover { border-color: var(--accent); background: rgba(0,196,255,0.1); }
+        .proof-upload-area .pu-icon { font-size: 2rem; margin-bottom: 8px; }
+        .proof-upload-area .pu-text { font-size: 0.9rem; color: var(--muted); font-weight: 600; }
+        .proof-upload-area .pu-sub { font-size: 0.75rem; color: var(--muted); opacity: .7; margin-top: 4px; }
+        .proof-upload-area input[type="file"] { display: none; }
+        .proof-preview { margin-top: 12px; display: none; }
+        .proof-preview img { width: 100%; max-height: 220px; object-fit: contain; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
+        .proof-send-btn {
+            width: 100%; padding: 13px; border: none; border-radius: 10px; margin-top: 12px;
+            background: linear-gradient(90deg, #ff8c00, #ff4757);
+            color: #fff; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; transition: .25s; display: none;
+        }
+        .proof-send-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+        .proof-send-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+
+        /* Confirm payment box */
+        .confirm-box {
+            display: none; margin-top: 16px;
+            background: rgba(75,226,122,0.08); border: 2px solid rgba(75,226,122,0.3);
+            border-radius: 14px; padding: 20px; text-align: center;
+            animation: fadeUp .4s ease;
+        }
+        .confirm-box.show { display: block; }
+        .confirm-btn {
+            width: 100%; padding: 13px; border: none; border-radius: 10px;
+            background: linear-gradient(90deg, var(--success), #00d9a0);
+            color: #011a0a; font-family: 'Poppins', sans-serif; font-size: 0.95rem; font-weight: 700;
+            cursor: pointer; transition: .25s; margin-top: 12px;
+        }
+        .confirm-btn:hover { filter: brightness(1.1); transform: translateY(-2px); }
+
+        /* Thank you / contact box */
+        .thankyou-box {
+            display: none; margin-top: 16px;
+            background: rgba(0,0,0,0.4); border: 2px solid rgba(0,196,255,0.3);
+            border-radius: 14px; padding: 24px; text-align: center;
+            animation: fadeUp .5s ease;
+        }
+        .thankyou-box.show { display: block; }
+        .thankyou-box .ty-title { font-size: 1.3rem; font-weight: 700; color: var(--success); margin-bottom: 8px; }
+        .thankyou-box .ty-sub { color: var(--muted); font-size: 0.88rem; line-height: 1.7; margin-bottom: 18px; }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .contact-item {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 12px; padding: 14px; text-decoration: none; color: var(--text);
+            transition: .2s; display: flex; flex-direction: column; align-items: center; gap: 6px;
+        }
+        .contact-item:hover { border-color: var(--accent); transform: translateY(-3px); }
+        .contact-item .ci-icon { font-size: 1.5rem; }
+        .contact-item .ci-name { font-size: 0.85rem; font-weight: 700; color: var(--accent); }
+        .contact-item .ci-val { font-size: 0.75rem; color: var(--muted); }
+
+        /* ATM Proof section */
+        .atm-proof-section { margin-top: 16px; display: none; animation: fadeUp .3s ease; }
+        .atm-proof-section.show { display: block; }
 
         /* Chatbot */
         #cypher-toggle { position: fixed; bottom: 24px; right: 24px; width:56px; height:56px; border-radius:50%; background: linear-gradient(135deg,#00c6ff,#0072ff); color:#fff; border:none; z-index:10050; cursor:pointer; box-shadow:0 8px 30px rgba(0,0,0,0.35); display:flex; align-items:center; justify-content:center; font-size:22px; transition: transform 0.3s ease; }
@@ -388,7 +504,7 @@
 
         footer{margin-top:26px;text-align:center;color:var(--muted);font-size:0.9rem;padding-bottom:80px}
         @media(max-width:980px){.grid{grid-template-columns:1fr}.panel{order:-1}.web-card{flex:0 0 100%}}
-        @media(max-width:520px){.ext-grid{grid-template-columns:repeat(2,1fr)}.bank-pills{grid-template-columns:1fr 1fr}}
+        @media(max-width:520px){.ext-grid{grid-template-columns:repeat(2,1fr)}.bank-pills{grid-template-columns:1fr 1fr}.contact-grid{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
@@ -529,6 +645,50 @@
             <canvas id="qrCanvas"></canvas>
             <p class="receiver-note">Người nhận: <strong>Lê Văn Linh</strong></p>
         </div>
+
+        <!-- ATM Proof Upload Section -->
+        <div class="atm-proof-section" id="atm-proof-section">
+            <div class="atm-card">
+                <span class="atm-label">📸 Gửi bằng chứng thanh toán</span>
+                <div class="proof-upload-area" id="atm-proof-area" onclick="document.getElementById('atm-proof-file').click()">
+                    <div class="pu-icon">📷</div>
+                    <div class="pu-text">Nhấn để tải ảnh bill lên</div>
+                    <div class="pu-sub">Hỗ trợ JPG, PNG, WEBP</div>
+                    <input type="file" id="atm-proof-file" accept="image/*" onchange="previewAtmProof(this)">
+                </div>
+                <div class="proof-preview" id="atm-proof-preview">
+                    <img id="atm-proof-img" src="" alt="Bill thanh toán">
+                </div>
+                <button class="proof-send-btn" id="atm-proof-send-btn" onclick="sendAtmProof()">
+                    📤 Gửi bằng chứng cho Admin
+                </button>
+            </div>
+
+            <!-- Confirm button (appears after proof sent) -->
+            <div class="confirm-box" id="atm-confirm-box">
+                <p style="color:var(--success);font-weight:700;font-size:1rem;margin-bottom:6px;">✅ Đã gửi bằng chứng thành công!</p>
+                <p style="color:var(--muted);font-size:0.85rem;margin-bottom:14px;">Nhấn nút bên dưới để xác nhận hoàn tất thanh toán.</p>
+                <button class="confirm-btn" onclick="confirmAtmPayment()">✅ Tôi xác nhận đã thanh toán</button>
+            </div>
+
+            <!-- Thank you box -->
+            <div class="thankyou-box" id="atm-thankyou-box">
+                <div class="ty-title">🎉 Cảm ơn bạn đã sử dụng dịch vụ!</div>
+                <div class="ty-sub">Thanh toán của bạn đã được ghi nhận. Hãy liên hệ với Admin qua các phương thức bên dưới để nhận thông tin quản trị website.</div>
+                <div class="contact-grid">
+                    <a class="contact-item" href="https://zalo.me/0366241530" target="_blank">
+                        <span class="ci-icon">💬</span>
+                        <span class="ci-name">Zalo</span>
+                        <span class="ci-val">0366241530</span>
+                    </a>
+                    <a class="contact-item" href="https://www.facebook.com/onessz26/" target="_blank">
+                        <span class="ci-icon">📘</span>
+                        <span class="ci-name">Facebook</span>
+                        <span class="ci-val">Cypher Dev</span>
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -543,15 +703,23 @@
             <!-- LEFT COLUMN -->
             <div>
 
+                <!-- Web type -->
+                <div class="shop-card">
+                    <h3><span class="step-num">1</span> Loại Website Muốn Làm</h3>
+                    <input class="shop-input" type="text" id="shop-webtype"
+                        placeholder="Ví dụ: Shop game, bán hàng, portfolio..."
+                        oninput="calcShop()">
+                    <p class="shop-input-hint">Mô tả ngắn về website bạn muốn (tính năng, mục đích sử dụng).</p>
+                </div>
+
                 <!-- Domain name -->
                 <div class="shop-card">
-                    <h3><span class="step-num">1</span> Tên miền</h3>
+                    <h3><span class="step-num">2</span> Tên miền</h3>
                     <input class="shop-input" type="text" id="shop-domain"
                         placeholder="Nhập tên miền (vd: cypher234)"
                         oninput="updateDomainPreview()">
                     <p class="shop-input-hint">Chỉ nhập phần tên, chưa cần đuôi miền.</p>
                     <div class="domain-preview" id="domain-preview">—</div>
-                    <!-- Domain check row -->
                     <div class="domain-check-row" style="margin-top:10px;">
                         <button class="domain-check-btn" id="domain-check-btn" onclick="checkDomain()" disabled>🔍 Kiểm tra tên miền</button>
                     </div>
@@ -560,7 +728,7 @@
 
                 <!-- Domain extension -->
                 <div class="shop-card">
-                    <h3><span class="step-num">2</span> Đuôi miền</h3>
+                    <h3><span class="step-num">3</span> Đuôi miền</h3>
                     <div class="ext-grid">
                         <div class="ext-opt" data-ext=".com" data-price="250000" onclick="selectExt(this)">
                             <div class="eo-name">.com</div><div class="eo-price">250.000đ/năm</div>
@@ -579,7 +747,7 @@
 
                 <!-- Hosting -->
                 <div class="shop-card">
-                    <h3><span class="step-num">3</span> Gói Hosting</h3>
+                    <h3><span class="step-num">4</span> Gói Hosting</h3>
                     <div class="host-grid">
                         <div class="host-opt active" data-price="8000" onclick="selectHost(this)">
                             <div class="ho-name">Gói 1</div><div class="ho-price">8.000đ/tháng</div>
@@ -598,7 +766,7 @@
 
                 <!-- Addons -->
                 <div class="shop-card">
-                    <h3><span class="step-num">4</span> Dịch vụ thêm</h3>
+                    <h3><span class="step-num">5</span> Dịch vụ thêm</h3>
                     <div class="cb-row" id="api-row" onclick="toggleApi()">
                         <input type="checkbox" id="shop-api" onchange="calcShop()">
                         <label for="shop-api">
@@ -611,7 +779,7 @@
 
                 <!-- Design fee -->
                 <div class="shop-card">
-                    <h3><span class="step-num">5</span> Tiền công thiết kế</h3>
+                    <h3><span class="step-num">6</span> Tiền công thiết kế</h3>
                     <div class="fee-badge">
                         <span class="fb-label">Cố định (mọi gói)</span>
                         <span class="fb-value">300.000đ</span>
@@ -619,28 +787,82 @@
                     <p class="shop-input-hint" style="margin-top:8px;">Bao gồm setup, cài đặt và bàn giao đầy đủ.</p>
                 </div>
 
+                <!-- Payment type -->
+                <div class="shop-card">
+                    <h3><span class="step-num">7</span> Hình Thức Thanh Toán</h3>
+                    <div class="pay-type-grid">
+                        <div class="pay-type-opt active" data-type="full" onclick="selectPayType(this)">
+                            <div class="pto-icon">💵</div>
+                            <div class="pto-name">Trả thẳng</div>
+                            <div class="pto-desc">Thanh toán 1 lần toàn bộ</div>
+                        </div>
+                        <div class="pay-type-opt" data-type="installment" onclick="selectPayType(this)">
+                            <div class="pto-icon">📅</div>
+                            <div class="pto-name">Trả góp</div>
+                            <div class="pto-desc">Chia nhỏ theo tuần/tháng</div>
+                        </div>
+                    </div>
+
+                    <!-- Installment options (shown when trả góp selected) -->
+                    <div class="installment-box" id="installment-box">
+                        <span class="inst-label">Chọn hình thức trả góp</span>
+                        <div class="inst-type-grid">
+                            <div class="inst-type-opt active" data-insttype="month" onclick="selectInstType(this)">
+                                <div class="ito-name">📅 Theo tháng</div>
+                                <div class="ito-max">Tối đa 3 tháng</div>
+                            </div>
+                            <div class="inst-type-opt" data-insttype="week" onclick="selectInstType(this)">
+                                <div class="ito-name">📆 Theo tuần</div>
+                                <div class="ito-max">Tối đa 4 tuần</div>
+                            </div>
+                        </div>
+
+                        <span class="inst-label" style="margin-top:4px;">Số kỳ thanh toán</span>
+                        <div class="inst-period-grid" id="inst-period-grid">
+                            <!-- Filled by JS -->
+                        </div>
+
+                        <div class="deposit-row">
+                            <span class="inst-label">Trả trước (đặt cọc)</span>
+                            <input class="shop-input" type="number" id="shop-deposit"
+                                placeholder="Nhập số tiền trả trước..." oninput="validateDeposit()">
+                            <p class="deposit-hint" id="deposit-hint">Nhập số tiền bạn muốn trả trước.</p>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-            <!-- RIGHT COLUMN — Summary + Payment (always visible) -->
+            <!-- RIGHT COLUMN -->
             <div>
 
                 <!-- Summary -->
                 <div class="shop-card">
                     <h3>📊 Tổng Chi Phí Tháng Đầu</h3>
                     <div class="summary-box">
+                        <div class="sum-row"><span class="sl">Loại web</span><span class="sv" id="ss-webtype">—</span></div>
                         <div class="sum-row"><span class="sl">Tên miền</span><span class="sv" id="ss-domain">—</span></div>
                         <div class="sum-row"><span class="sl">Hosting</span><span class="sv" id="ss-hosting">8.000đ/tháng</span></div>
                         <div class="sum-row"><span class="sl">API Auto Bank</span><span class="sv" id="ss-api">—</span></div>
                         <div class="sum-row"><span class="sl">Tiền công thiết kế</span><span class="sv">300.000đ</span></div>
+                        <div class="sum-row"><span class="sl">Hình thức TT</span><span class="sv" id="ss-paytype">Trả thẳng</span></div>
                         <div class="sum-row total-row">
                             <span class="sl">TỔNG THÁNG ĐẦU</span>
                             <span class="sv" id="ss-total">—</span>
+                        </div>
+                        <div class="sum-row" id="ss-deposit-row" style="display:none;">
+                            <span class="sl" style="color:#ff8c00;">Trả trước (cọc)</span>
+                            <span class="sv" id="ss-deposit" style="color:#ff8c00;">—</span>
+                        </div>
+                        <div class="sum-row" id="ss-remaining-row" style="display:none;">
+                            <span class="sl">Còn lại</span>
+                            <span class="sv" id="ss-remaining">—</span>
                         </div>
                     </div>
                     <button class="shop-btn" id="shop-pay-btn" onclick="shopPay()">💳 Tính & Thanh Toán</button>
                 </div>
 
-                <!-- Payment panel — ALWAYS VISIBLE -->
+                <!-- Payment panel -->
                 <div class="pay-panel" id="pay-panel">
                     <div class="shop-card">
                         <h3>💳 Thông tin thanh toán</h3>
@@ -670,11 +892,52 @@
                             </div>
                         </div>
 
-                        <!-- FIX: QR glow với div riêng, không dùng ::before pseudo-element -->
                         <div class="pay-qr-wrap">
                             <div class="pay-qr-inner">
                                 <div class="pay-qr-glow"></div>
                                 <img id="shop-qr-img" src="https://img.vietqr.io/image/TCB-19073015796012-compact2.png?amount=383000&addInfo=ThanhToanWeb&accountName=Le%20Van%20Linh" alt="QR Thanh Toán">
+                            </div>
+                        </div>
+
+                        <!-- Proof upload for shop -->
+                        <div class="shop-card" style="background:rgba(0,0,0,0.2);padding:16px;margin:12px 0;">
+                            <span class="atm-label">📸 Gửi bằng chứng đã thanh toán</span>
+                            <div class="proof-upload-area" id="shop-proof-area" onclick="document.getElementById('shop-proof-file').click()">
+                                <div class="pu-icon">📷</div>
+                                <div class="pu-text">Nhấn để tải ảnh bill lên</div>
+                                <div class="pu-sub">Hỗ trợ JPG, PNG, WEBP</div>
+                                <input type="file" id="shop-proof-file" accept="image/*" onchange="previewShopProof(this)">
+                            </div>
+                            <div class="proof-preview" id="shop-proof-preview">
+                                <img id="shop-proof-img" src="" alt="Bill thanh toán">
+                            </div>
+                            <button class="proof-send-btn" id="shop-proof-send-btn" onclick="sendShopProof()">
+                                📤 Gửi bằng chứng cho Admin
+                            </button>
+                        </div>
+
+                        <!-- Confirm box -->
+                        <div class="confirm-box" id="shop-confirm-box">
+                            <p style="color:var(--success);font-weight:700;font-size:1rem;margin-bottom:6px;">✅ Đã gửi bằng chứng thành công!</p>
+                            <p style="color:var(--muted);font-size:0.85rem;margin-bottom:14px;">Admin đã nhận được thông tin đơn hàng và bằng chứng thanh toán. Nhấn xác nhận để hoàn tất.</p>
+                            <button class="confirm-btn" onclick="confirmShopPayment()">✅ Tôi xác nhận đã thanh toán</button>
+                        </div>
+
+                        <!-- Thank you box -->
+                        <div class="thankyou-box" id="shop-thankyou-box">
+                            <div class="ty-title">🎉 Cảm ơn bạn đã sử dụng dịch vụ!</div>
+                            <div class="ty-sub">Đơn hàng của bạn đã được ghi nhận. Hãy liên hệ với Admin qua các phương thức bên dưới để nhận thông tin quản trị website của bạn.</div>
+                            <div class="contact-grid">
+                                <a class="contact-item" href="https://zalo.me/0366241530" target="_blank">
+                                    <span class="ci-icon">💬</span>
+                                    <span class="ci-name">Zalo</span>
+                                    <span class="ci-val">0366241530</span>
+                                </a>
+                                <a class="contact-item" href="https://www.facebook.com/onessz26/" target="_blank">
+                                    <span class="ci-icon">📘</span>
+                                    <span class="ci-name">Facebook</span>
+                                    <span class="ci-val">Cypher Dev</span>
+                                </a>
                             </div>
                         </div>
 
@@ -718,6 +981,13 @@
 </div>
 
 <script>
+    /* ==============================
+       TELEGRAM CONFIG
+       Điền Bot Token và Admin Chat ID của bạn vào đây
+    ============================== */
+    const TG_BOT_TOKEN = '8543235344:AAF0tvEOd8jUFY8fBV2rAq-vPUMzZEajJyg'; // VD: 7123456789:AAGxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    const TG_ADMIN_ID  = '7520535840';  // VD: 123456789
+
     /* ---- Tab switching ---- */
     function showTab(id, btn) {
         document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
@@ -746,9 +1016,54 @@
         });
     });
 
+    /* ========== TELEGRAM HELPERS ========== */
+    async function sendTelegramMessage(text) {
+        try {
+            const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
+            await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: TG_ADMIN_ID,
+                    text: text,
+                    parse_mode: 'HTML'
+                })
+            });
+        } catch(e) {
+            console.warn('Telegram message failed:', e);
+        }
+    }
+
+    async function sendTelegramPhoto(base64Data, caption) {
+        try {
+            // Convert base64 to blob
+            const arr = base64Data.split(',');
+            const mime = arr[0].match(/:(.*?);/)[1];
+            const bstr = atob(arr[1]);
+            let n = bstr.length;
+            const u8arr = new Uint8Array(n);
+            while (n--) u8arr[n] = bstr.charCodeAt(n);
+            const blob = new Blob([u8arr], { type: mime });
+
+            const formData = new FormData();
+            formData.append('chat_id', TG_ADMIN_ID);
+            formData.append('photo', blob, 'payment_proof.jpg');
+            formData.append('caption', caption);
+            formData.append('parse_mode', 'HTML');
+
+            const url = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendPhoto`;
+            const res = await fetch(url, { method: 'POST', body: formData });
+            return res.ok;
+        } catch(e) {
+            console.warn('Telegram photo failed:', e);
+            return false;
+        }
+    }
+
     /* ========== ATM / QR ========== */
     let atmBankId  = 'TCB';
     let atmBankAcc = '19073015796012';
+    let atmProofBase64 = null;
 
     function selectAtmBank(el) {
         document.querySelectorAll('.bank-pill').forEach(p => p.classList.remove('active'));
@@ -761,6 +1076,7 @@
         const wrap = document.getElementById('atm-canvas-wrap');
         wrap.classList.remove('show');
         document.getElementById('atm-dl-btn').style.display = 'none';
+        document.getElementById('atm-proof-section').classList.remove('show');
         const ctx = document.getElementById('qrCanvas').getContext('2d');
         ctx.clearRect(0, 0, 9999, 9999);
     }
@@ -797,6 +1113,7 @@
             ctx.drawImage(img, 0, 0);
             document.getElementById('atm-canvas-wrap').classList.add('show');
             document.getElementById('atm-dl-btn').style.display = 'block';
+            document.getElementById('atm-proof-section').classList.add('show');
             showToast('✅ Đã tạo QR thành công!');
         };
         img.onerror = () => { showToast('❌ Không thể tải ảnh QR. Kiểm tra kết nối mạng!'); };
@@ -814,18 +1131,60 @@
         showToast('⬇ Đang tải QR...');
     }
 
+    function previewAtmProof(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            atmProofBase64 = e.target.result;
+            document.getElementById('atm-proof-img').src = e.target.result;
+            document.getElementById('atm-proof-preview').style.display = 'block';
+            document.getElementById('atm-proof-send-btn').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    async function sendAtmProof() {
+        if (!atmProofBase64) { showToast('⚠️ Chưa chọn ảnh bill!'); return; }
+        const btn = document.getElementById('atm-proof-send-btn');
+        btn.disabled = true;
+        btn.textContent = '⏳ Đang gửi...';
+        const amount = document.getElementById('atm-amount').value || '0';
+        const bank   = atmBankId === 'TCB' ? 'Techcombank' : 'MBBank';
+        const content = document.getElementById('atm-content').value;
+        const caption = `📸 <b>Bill thanh toán (Tạo QR)</b>\n\n🏦 Ngân hàng: ${bank}\n💰 Số tiền: ${parseInt(amount).toLocaleString('vi-VN')} VND\n📝 Nội dung: ${content}`;
+
+        const ok = await sendTelegramPhoto(atmProofBase64, caption);
+        btn.disabled = false;
+        btn.textContent = '📤 Gửi bằng chứng cho Admin';
+        if (ok) {
+            document.getElementById('atm-confirm-box').classList.add('show');
+            showToast('✅ Đã gửi bằng chứng cho Admin!');
+        } else {
+            showToast('❌ Gửi thất bại. Kiểm tra lại cấu hình Telegram!');
+        }
+    }
+
+    function confirmAtmPayment() {
+        document.getElementById('atm-confirm-box').classList.remove('show');
+        document.getElementById('atm-thankyou-box').classList.add('show');
+        showToast('🎉 Cảm ơn bạn đã sử dụng dịch vụ!');
+    }
+
     /* ========== BUILDSHOP ========== */
     let shopExtPrice = 75000, shopExtName = '.shop';
     let shopHostPrice = 8000;
-    const DESIGN_FEE = 300000;
+    let shopPayType   = 'full';
+    let shopInstType  = 'month';
+    let shopInstPeriods = 1;
+    const DESIGN_FEE  = 300000;
+    let shopProofBase64 = null;
 
     function updateDomainPreview() {
         const name = document.getElementById('shop-domain').value.trim();
         document.getElementById('domain-preview').textContent =
             name ? name + shopExtName : '—';
-        // Enable/disable check button
         document.getElementById('domain-check-btn').disabled = !name;
-        // Reset domain status when name changes
         const statusEl = document.getElementById('domain-status');
         statusEl.className = 'domain-status';
         statusEl.textContent = '';
@@ -838,7 +1197,6 @@
         shopExtPrice = parseInt(el.dataset.price);
         shopExtName  = el.dataset.ext;
         updateDomainPreview();
-        // Reset domain status when extension changes
         const statusEl = document.getElementById('domain-status');
         statusEl.className = 'domain-status';
         statusEl.textContent = '';
@@ -859,36 +1217,214 @@
         calcShop();
     }
 
+    /* --- Payment type --- */
+    function selectPayType(el) {
+        document.querySelectorAll('.pay-type-opt').forEach(e => e.classList.remove('active'));
+        el.classList.add('active');
+        shopPayType = el.dataset.type;
+        const box = document.getElementById('installment-box');
+        if (shopPayType === 'installment') {
+            box.classList.add('show');
+            renderInstPeriods();
+        } else {
+            box.classList.remove('show');
+        }
+        calcShop();
+    }
+
+    function selectInstType(el) {
+        document.querySelectorAll('.inst-type-opt').forEach(e => e.classList.remove('active'));
+        el.classList.add('active');
+        shopInstType = el.dataset.insttype;
+        shopInstPeriods = 1;
+        renderInstPeriods();
+        calcShop();
+    }
+
+    function renderInstPeriods() {
+        const grid = document.getElementById('inst-period-grid');
+        const total = calcShopTotal();
+        const max = shopInstType === 'month' ? 3 : 4;
+        const unit = shopInstType === 'month' ? 'tháng' : 'tuần';
+        grid.innerHTML = '';
+        for (let i = 1; i <= max; i++) {
+            const perPeriod = Math.ceil(total / i);
+            const div = document.createElement('div');
+            div.className = 'inst-period-opt' + (shopInstPeriods === i ? ' active' : '');
+            div.dataset.periods = i;
+            div.innerHTML = `<span class="ipo-label">${i} ${unit}</span><span class="ipo-amount">~${perPeriod.toLocaleString('vi-VN')}đ/${unit}</span>`;
+            div.onclick = function() {
+                document.querySelectorAll('.inst-period-opt').forEach(e => e.classList.remove('active'));
+                this.classList.add('active');
+                shopInstPeriods = parseInt(this.dataset.periods);
+                calcShop();
+                validateDeposit();
+            };
+            grid.appendChild(div);
+        }
+    }
+
+    function validateDeposit() {
+        const val = parseInt(document.getElementById('shop-deposit').value) || 0;
+        const total = calcShopTotal();
+        const hint = document.getElementById('deposit-hint');
+        const minDeposit = shopExtPrice < 100000 ? 100000 : 250000;
+        if (val === 0) {
+            hint.className = 'deposit-hint';
+            hint.textContent = `Tối thiểu: ${minDeposit.toLocaleString('vi-VN')}đ`;
+            return;
+        }
+        if (val < minDeposit) {
+            hint.className = 'deposit-hint warn';
+            hint.textContent = `⚠️ Tối thiểu phải là ${minDeposit.toLocaleString('vi-VN')}đ`;
+        } else if (val >= total) {
+            hint.className = 'deposit-hint warn';
+            hint.textContent = '⚠️ Không nên đặt cọc >= tổng tiền. Dùng trả thẳng thay thế.';
+        } else {
+            hint.className = 'deposit-hint ok';
+            hint.textContent = `✅ Hợp lệ. Còn lại: ${(total - val).toLocaleString('vi-VN')}đ`;
+        }
+        calcShop();
+    }
+
+    function calcShopTotal() {
+        const api = document.getElementById('shop-api').checked ? 35000 : 0;
+        return DESIGN_FEE + shopExtPrice + shopHostPrice + api;
+    }
+
     function calcShop() {
         const api    = document.getElementById('shop-api').checked ? 35000 : 0;
         const total  = DESIGN_FEE + shopExtPrice + shopHostPrice + api;
+        const webtype = document.getElementById('shop-webtype').value.trim();
+        const deposit = parseInt(document.getElementById('shop-deposit').value) || 0;
 
-        document.getElementById('ss-domain').textContent  = shopExtPrice.toLocaleString('vi-VN') + 'đ (' + shopExtName + '/năm)';
-        document.getElementById('ss-hosting').textContent = shopHostPrice.toLocaleString('vi-VN') + 'đ/tháng';
-        document.getElementById('ss-api').textContent     = api ? '35.000đ/tháng' : '—';
-        document.getElementById('ss-total').textContent   = total.toLocaleString('vi-VN') + 'đ';
+        document.getElementById('ss-webtype').textContent  = webtype || '—';
+        document.getElementById('ss-domain').textContent   = shopExtPrice.toLocaleString('vi-VN') + 'đ (' + shopExtName + '/năm)';
+        document.getElementById('ss-hosting').textContent  = shopHostPrice.toLocaleString('vi-VN') + 'đ/tháng';
+        document.getElementById('ss-api').textContent      = api ? '35.000đ/tháng' : '—';
+        document.getElementById('ss-total').textContent    = total.toLocaleString('vi-VN') + 'đ';
+
+        if (shopPayType === 'full') {
+            document.getElementById('ss-paytype').textContent = 'Trả thẳng';
+            document.getElementById('ss-deposit-row').style.display = 'none';
+            document.getElementById('ss-remaining-row').style.display = 'none';
+        } else {
+            const unit = shopInstType === 'month' ? 'tháng' : 'tuần';
+            document.getElementById('ss-paytype').textContent = `Trả góp ${shopInstPeriods} ${unit}`;
+            if (deposit > 0) {
+                document.getElementById('ss-deposit-row').style.display = 'flex';
+                document.getElementById('ss-deposit').textContent = deposit.toLocaleString('vi-VN') + 'đ';
+                document.getElementById('ss-remaining-row').style.display = 'flex';
+                document.getElementById('ss-remaining').textContent = (total - deposit).toLocaleString('vi-VN') + 'đ';
+            } else {
+                document.getElementById('ss-deposit-row').style.display = 'none';
+                document.getElementById('ss-remaining-row').style.display = 'none';
+            }
+        }
         return total;
     }
 
     function shopPay() {
         const name = document.getElementById('shop-domain').value.trim();
         if (!name) { showToast('⚠️ Vui lòng nhập tên miền!'); return; }
+        const webtype = document.getElementById('shop-webtype').value.trim();
+        if (!webtype) { showToast('⚠️ Vui lòng nhập loại website!'); return; }
 
         const total      = calcShop();
+        const deposit    = parseInt(document.getElementById('shop-deposit').value) || 0;
         const fullDomain = name + shopExtName;
+        const payAmount  = shopPayType === 'installment' && deposit > 0 ? deposit : total;
         const note       = encodeURIComponent('ThanhToan ' + fullDomain);
-        const qrUrl      = `https://img.vietqr.io/image/TCB-19073015796012-compact2.png?amount=${total}&addInfo=${note}&accountName=${encodeURIComponent('Le Van Linh')}`;
+        const qrUrl      = `https://img.vietqr.io/image/TCB-19073015796012-compact2.png?amount=${payAmount}&addInfo=${note}&accountName=${encodeURIComponent('Le Van Linh')}`;
 
-        document.getElementById('pay-total-text').textContent = total.toLocaleString('vi-VN') + 'đ';
+        document.getElementById('pay-total-text').textContent = payAmount.toLocaleString('vi-VN') + 'đ'
+            + (shopPayType === 'installment' && deposit > 0 ? ' (Trả trước)' : '');
         document.getElementById('shop-qr-img').src = qrUrl;
 
-        // Scroll to payment info
+        // Send order info to Telegram
+        const api   = document.getElementById('shop-api').checked;
+        const unit  = shopInstType === 'month' ? 'tháng' : 'tuần';
+        const payTypeStr = shopPayType === 'full'
+            ? 'Trả thẳng'
+            : `Trả góp ${shopInstPeriods} ${unit}${deposit > 0 ? ` (cọc: ${deposit.toLocaleString('vi-VN')}đ)` : ''}`;
+
+        const msg = `🛒 <b>ĐƠN HÀNG WEB MỚI</b>\n\n`
+            + `🌐 Tên miền: <code>${fullDomain}</code>\n`
+            + `💡 Loại web: ${webtype}\n`
+            + `💳 Hình thức TT: ${payTypeStr}\n`
+            + `🖥️ Hosting: ${shopHostPrice.toLocaleString('vi-VN')}đ/tháng\n`
+            + `🤖 API Auto Bank: ${api ? 'Có' : 'Không'}\n`
+            + `💰 Tổng: ${total.toLocaleString('vi-VN')}đ\n`
+            + `💵 Cần thanh toán: ${payAmount.toLocaleString('vi-VN')}đ`;
+
+        sendTelegramMessage(msg);
+
         document.getElementById('pay-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
         showToast('💳 Thông tin thanh toán đã sẵn sàng!');
     }
 
     function shopCopy(txt) {
         navigator.clipboard.writeText(txt).then(() => showToast('📋 Đã sao chép: ' + txt));
+    }
+
+    /* ---- Shop proof upload ---- */
+    function previewShopProof(input) {
+        const file = input.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            shopProofBase64 = e.target.result;
+            document.getElementById('shop-proof-img').src = e.target.result;
+            document.getElementById('shop-proof-preview').style.display = 'block';
+            document.getElementById('shop-proof-send-btn').style.display = 'block';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    async function sendShopProof() {
+        if (!shopProofBase64) { showToast('⚠️ Chưa chọn ảnh bill!'); return; }
+        const btn = document.getElementById('shop-proof-send-btn');
+        btn.disabled = true;
+        btn.textContent = '⏳ Đang gửi...';
+
+        const name     = document.getElementById('shop-domain').value.trim();
+        const webtype  = document.getElementById('shop-webtype').value.trim();
+        const total    = calcShop();
+        const deposit  = parseInt(document.getElementById('shop-deposit').value) || 0;
+        const fullDomain = name + shopExtName;
+        const payAmount  = shopPayType === 'installment' && deposit > 0 ? deposit : total;
+        const unit     = shopInstType === 'month' ? 'tháng' : 'tuần';
+        const payTypeStr = shopPayType === 'full'
+            ? 'Trả thẳng'
+            : `Trả góp ${shopInstPeriods} ${unit}`;
+        const api      = document.getElementById('shop-api').checked;
+
+        const caption = `📸 <b>Bill thanh toán Website</b>\n\n`
+            + `🌐 Tên miền: <code>${fullDomain}</code>\n`
+            + `💡 Loại web: ${webtype}\n`
+            + `💳 Hình thức TT: ${payTypeStr}\n`
+            + `🖥️ Hosting: ${shopHostPrice.toLocaleString('vi-VN')}đ/tháng\n`
+            + `🤖 API Auto Bank: ${api ? 'Có' : 'Không'}\n`
+            + `💰 Tổng: ${total.toLocaleString('vi-VN')}đ\n`
+            + `💵 Đã thanh toán: ${payAmount.toLocaleString('vi-VN')}đ`;
+
+        const ok = await sendTelegramPhoto(shopProofBase64, caption);
+        btn.disabled = false;
+        btn.textContent = '📤 Gửi bằng chứng cho Admin';
+
+        if (ok) {
+            document.getElementById('shop-confirm-box').classList.add('show');
+            showToast('✅ Đã gửi bằng chứng cho Admin!');
+        } else {
+            showToast('❌ Gửi thất bại. Kiểm tra lại cấu hình Telegram!');
+        }
+    }
+
+    function confirmShopPayment() {
+        document.getElementById('shop-confirm-box').classList.remove('show');
+        document.getElementById('shop-thankyou-box').classList.add('show');
+        document.getElementById('shop-thankyou-box').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        showToast('🎉 Cảm ơn bạn đã sử dụng dịch vụ!');
     }
 
     /* ========== DOMAIN CHECK ========== */
@@ -900,24 +1436,20 @@
         const statusEl = document.getElementById('domain-status');
         const btn = document.getElementById('domain-check-btn');
 
-        // Show checking state
         statusEl.className = 'domain-status checking show';
         statusEl.textContent = '⏳ Đang kiểm tra ' + fullDomain + ' ...';
         btn.disabled = true;
 
         try {
-            // Use rdap.org public API (no CORS issues)
             const resp = await fetch(
                 'https://rdap.org/domain/' + encodeURIComponent(fullDomain),
                 { method: 'GET', signal: AbortSignal.timeout(8000) }
             );
 
             if (resp.status === 404) {
-                // 404 = domain not found = available
                 statusEl.className = 'domain-status available show';
                 statusEl.innerHTML = '✅ <strong>' + fullDomain + '</strong> có thể đăng ký! Tên miền này chưa được sử dụng.';
             } else if (resp.ok) {
-                // 200 = domain exists = taken
                 statusEl.className = 'domain-status taken show';
                 statusEl.innerHTML = '❌ <strong>' + fullDomain + '</strong> đã được mua. Hãy chọn tên miền khác!';
             } else {
@@ -928,14 +1460,12 @@
                 statusEl.className = 'domain-status taken show';
                 statusEl.innerHTML = '⚠️ Không thể kiểm tra tên miền. Vui lòng thử lại sau.';
             } else {
-                // Fallback: try DoH (DNS over HTTPS) check
                 try {
                     const doh = await fetch(
                         'https://cloudflare-dns.com/dns-query?name=' + encodeURIComponent(fullDomain) + '&type=A',
                         { headers: { 'Accept': 'application/dns-json' }, signal: AbortSignal.timeout(6000) }
                     );
                     const data = await doh.json();
-                    // If NXDOMAIN (Status 3) = not registered
                     if (data.Status === 3) {
                         statusEl.className = 'domain-status available show';
                         statusEl.innerHTML = '✅ <strong>' + fullDomain + '</strong> có thể đăng ký! Tên miền này chưa được sử dụng.';
@@ -954,6 +1484,7 @@
     }
 
     calcShop();
+    renderInstPeriods();
 </script>
 
 <!-- Firebase + Comments -->
